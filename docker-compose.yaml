@@ -1,0 +1,63 @@
+networks:
+  levai_network:
+    driver: bridge
+
+volumes:
+  levai-data:
+    driver: local
+  levai-models:
+    driver: local
+
+
+services:
+  levai-database:
+    container_name: levai-database
+    build:
+      context: ./database
+      dockerfile: Dockerfile
+      args:
+        DB_USER: ${DB_USER}
+        DB_PASSWORD: ${DB_PASSWORD}
+        DB_NAME: ${DB_NAME}
+    networks:
+      - levai_network
+    ports:
+      - "5432:5432"
+    volumes:
+      -  levai-data:/var/lib/postgresql/data
+      - ./database/backups:/backups
+    restart: always
+    env_file:
+      - .env
+  levai-models:
+    image: ollama/ollama
+    container_name: levai-models
+    networks:
+      - levai_network
+    ports:
+      - "11434:11434"
+    restart: always
+    volumes:
+      - levai-models:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+
+
+  levai-app:
+    container_name: levai-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - levai_network
+    ports:
+      - "8040:8000"
+    depends_on:
+      - levai-database
+      - levai-models
+    restart: always
+    env_file:
+      - .env
