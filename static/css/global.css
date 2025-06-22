@@ -1,0 +1,178 @@
+/* Reset básico de CSS */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border: 0;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    background: #111; /* Preto escuro */
+    color: #fff;
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+/* Remove decoração de links */
+a {
+    color: #fff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Padronização de botões e inputs */
+button, input, textarea, select {
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+    background: #222;
+    color: #fff;
+    border-radius: 4px;
+    border: none;
+    outline: none;
+}
+
+button {
+    cursor: pointer;
+    padding: 0.5em 1.2em;
+    background: #333;
+    transition: background 0.2s;
+}
+
+button:hover {
+    background: #444;
+}
+
+input, textarea, select {
+    padding: 0.5em;
+    background: #222;
+    color: #fff;
+    border: 1px solid #333;
+    margin-bottom: 1em;
+}
+
+h1, h2, h3, h4, h5, h6, p, label, span, div {
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+    color: #fff;
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: #fff;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+p, label, span {
+    font-size: 1rem;
+}
+
+body {
+    background: #111;
+    color: #fff;
+}
+
+/* Scrollbar customizada (opcional) */
+::-webkit-scrollbar {
+    width: 8px;
+    background: #222;
+}
+::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 4px;
+}
+
+.formContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 20px;
+    width: 100%;
+}
+
+.formContainer form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 500px;
+    background: #222;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    gap: 20px;
+}
+
+.formTitle {
+    text-align: center;
+    gap: 20px;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 20px;
+}
+
+.formGroup label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.formGroup input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #333;
+}
+
+.passwordContainer {
+    position: relative;
+    width: 100%;
+}
+
+.passwordContainer input {
+    width: 100%;
+    padding: 10px;
+    padding-right: 40px; /* Espaço para o botão do olho */
+    border-radius: 4px;
+    border: 1px solid #333;
+}
+
+.passwordContainer button,
+.passwordContainer .toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-70%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    font-size: 1.2em;
+    padding: 0;
+    z-index: 2;
+}
+.passwordContainer img {
+    width: 24px;
+    height: 24px;
+}

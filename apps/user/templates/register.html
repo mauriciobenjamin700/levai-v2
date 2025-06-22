@@ -1,24 +1,45 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro</title>
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script src="{% static 'js/scripts.js' %}"></script>
 </head>
 <body>
-    <div>
+    <div class="formContainer">
         <form action="" method="post">
             {% csrf_token %}
-            <h1>Cadastro</h1>
-            <label for="name">Nome:</label>
-            <input type="text" id="name" name="name" required>
-            <br>
-            <label for="email">E-mail:</label>
-            <input type="email" id="email" name="email" required>
-            <br>
-            <label for="password">Senha:</label>
-            <input type="password" id="password" name="password" required>
-            <br>
+            <h1 class="formTitle">Cadastro</h1>
+            <div class="formGroup">
+                <label for="name">Nome</label>
+                <input type="text" id="name" name="name" required>
+                <br>
+            </div>
+            <div class="formGroup">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" required>
+                <br>
+            </div>
+            <div class="formGroup">
+                <label for="password">Senha</label>
+                <div class="passwordContainer">
+                    <input type="password" id="password" name="password" required>
+                    <button type="button" id="togglePassword">
+                        <img 
+                            id="eyeIcon" 
+                            src="{% static 'images/eyesclose.svg' %}" 
+                            alt="Mostrar Senha"
+                        >
+                    </button>
+                </div>
+                
+                <br>
+            </div>
+            
             <button type="submit">Registrar</button>
             <p>Já tem uma conta? <a href="/auth/login">Entrar</a></p>
 
@@ -38,4 +59,5 @@
         </form>
     </div>
 </body>
+    <script src="{% static 'js/global.js' %}"></script>
 </html>
