@@ -11,27 +11,24 @@
 </head>
 <body>
     <div id="container" class="container">
-        <div id="header" class="headerContainer">
-            <h1>LevAI</h1>
-            <p>Um assistente de IA para o seu dia a dia.</p>
-            <div class="headerProfile">
-                <p>{{ request.user.username }}</p>
-                <form action="{% url 'logout' %}" method="post" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit">Sair</button>
-                </form>
+        {% include "partials/header.html" %}
+        {% include "partials/sidebar.html" %}
+        <div id="content" class="content">
+            <h2>Estou as Ordens</h2>
+            <div id="searchContainer" class="searchContainer">
+                <textarea id="search" placeholder="Pergunte o que quiser..." rows="3"></textarea>
+                <div class="buttonContainer">
+                    <button id="search-button" class="btn btn-primary" title="Upload de documento">
+                        📄
+                    </button>
+                    <button id="clear-button" class="btn btn-secondary" title="Enviar áudio">
+                        🎤
+                    </button>
+                    <button id="send-button" class="btn btn-success" title="Enviar pergunta">
+                        ➡️
+                    </button>
+                </div>
             </div>
-        </div>
-        <div id="sideBar" class="sideBarContainer">
-            <ul id="sideBar">
-                <li><a href="/chat">💬 Chat</a></li>
-                <li><a href="/documents">📄 Documentos</a></li>
-                <li><a href="/tasks">📅 Tarefas</a></li>
-                <li><a href="/videos">🎬 Videos</a></li>
-            </ul>
-        </div>
-        <div id="content">
-            
         </div>
     </div>
 </body>
