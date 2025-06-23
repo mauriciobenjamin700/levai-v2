@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Downloader Youtube Videos</title>
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+</head>
+<body>
+    <h1>Downloader Youtube Videos</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="url">URL do vídeo:</label>
+        <input type="text" id="url" name="url" required>
+        <br>
+        <label for="output">Diretório de saída:</label>
+        <input type="text" id="output" name="output" value="downloads" required>
+        <br>
+        <label for="file_name">Nome do arquivo:</label>
+        <input type="text" id="file_name" name="file_name" required>
+        <br>
+        <button type="submit">Baixar</button>
+    </form>
+    {% if messages %}
+        <ul>
+        {% for message in messages %}
+            <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>

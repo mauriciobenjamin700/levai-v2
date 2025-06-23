@@ -12,7 +12,9 @@ dependencies = [
     "pygments>=2.19.2",
     "pymdown-extensions>=10.16",
     "python-markdown-math>=0.9",
+    "pytube>=15.0.0",
     "weasyprint>=65.1",
+    "yt-dlp>=2025.6.9",
 ]
 
 [dependency-groups]

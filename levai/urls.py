@@ -25,4 +25,5 @@ urlpatterns = [
     path("auth/", include("apps.user.urls")),
     path("chat/", include("apps.chat.urls")),
     path("document/", include("apps.document.urls")),
+    path("video/", include("apps.video.urls")),
 ]
