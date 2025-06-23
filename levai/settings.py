@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "apps.user",
     "apps.chat",
     "apps.home",
+    "apps.document",
 ]
 
 MIDDLEWARE = [
