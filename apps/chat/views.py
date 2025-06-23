@@ -18,16 +18,3 @@ def chat_view(request):
 
     """
     return render(request, "index.html")
-
-
-def index_view(request):
-    """Render the index view for all users.
-
-    Args:
-        request (HttpRequest): The HTTP request object.
-
-    Returns:
-        HttpResponse: Rendered index view.
-
-    """
-    return render(request, "index.html")

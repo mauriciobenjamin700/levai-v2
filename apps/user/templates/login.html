@@ -37,7 +37,7 @@
             <p>Não tem uma conta? <a href="/auth/register">Registrar</a></p>
             <p><a href="/forgot-password">Esqueci minha senha</a></p>
 
-            {% if messages %}
+            <!-- {% if messages %}
             <div id="modal" style="display:block;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);z-index:1000;">
                 <div style="background:#fff;padding:2em;margin:10vh auto;width:300px;position:relative;">
                     {% for message in messages %}
@@ -48,9 +48,9 @@
                     <button onclick="document.getElementById('modal').style.display='none'">Fechar</button>
                 </div>
             </div>
-            {% endif %}
+            {% endif %} -->
         </form>
     </div>
-
+    <script src="{% static 'js/global.js' %}"></script>
 </body>
 </html>
