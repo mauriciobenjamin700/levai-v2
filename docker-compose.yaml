@@ -32,6 +32,7 @@ services:
   levai-models:
     image: ollama/ollama
     container_name: levai-models
+    command: "ollama pull DeepSeek-R1"
     networks:
       - levai_network
     ports:

@@ -15,6 +15,19 @@
         {% include "partials/sidebar.html" %}
         <div id="content" class="content">
             <h2>Estou as Ordens</h2>
+            <!-- Bloco para exibir os chats -->
+            <div id="chat-history">
+                {% for chat in chats %}
+                    <div class="chat-item">
+                        <h3>{{ chat.id }}</h3>
+                        {% for message in messages %}
+                        <p><strong>{{ message.role }}:</strong> {{ message.content }}</p>
+                        {% endfor %}
+                    </div>
+                {% empty %}
+                    <p>Nenhum chat encontrado.</p>
+                {% endfor %} 
+            </div>
             <div id="searchContainer" class="searchContainer">
                 <textarea id="search" placeholder="Pergunte o que quiser..." rows="3"></textarea>
                 <div class="buttonContainer">
@@ -25,7 +38,7 @@
                         🎤
                     </button>
                     <button id="send-button" class="btn btn-success" title="Enviar pergunta">
-                        ➡️
+                        <a href="/chat">➡️</a>
                     </button>
                 </div>
             </div>

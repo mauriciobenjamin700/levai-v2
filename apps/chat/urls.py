@@ -5,5 +5,5 @@ from django.urls import path
 from apps.chat.views import chat_view
 
 urlpatterns = [
-    path("chat/", chat_view, name="chat_view"),
+    path("", chat_view, name="chat_view"),
 ]
