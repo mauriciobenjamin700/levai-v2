@@ -15,20 +15,19 @@
         {% include "partials/sidebar.html" %}
         <div id="content" class="content">
             <h2>Estou as Ordens</h2>
-            <div id="searchContainer" class="searchContainer">
-                <textarea id="search" placeholder="Pergunte o que quiser..." rows="3"></textarea>
-                <div class="buttonContainer">
-                    <button id="search-button" class="btn btn-primary" title="Upload de documento">
-                        📄
-                    </button>
-                    <button id="clear-button" class="btn btn-secondary" title="Enviar áudio">
-                        🎤
-                    </button>
-                    <button id="send-button" class="btn btn-success" title="Enviar pergunta">
-                        <a href="/chat">➡️</a>
-                    </button>
-                </div>
+            <div id="chat-history">
+                {% for chat in chats %}
+                    <div class="chat-item">
+                        <h3>{{ chat.id }}</h3>
+                        {% for message in messages %}
+                        <p><strong>{{ message.role }}:</strong> {{ message.content }}</p>
+                        {% endfor %}
+                    </div>
+                {% empty %}
+                    <p>Nenhum chat encontrado.</p>
+                {% endfor %} 
             </div>
+            {% include "partials/chat_input.html" %}
         </div>
     </div>
 </body>
