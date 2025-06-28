@@ -1,7 +1,9 @@
+"""Videos URLS."""
+
 from django.urls import path
-from .views import download_view
+
+from apps.video.views import download_view
 
 urlpatterns = [
-    path("", download_view, name="download"),
-    path("download/", download_view, name="download"),
+    path("", download_view, name="download_view"),
 ]

@@ -1,4 +1,7 @@
+"""Chat Schemas."""
+
 from datetime import datetime
+
 from core.schemas.base import BaseSchema
 from core.utils.enums import ChatRole
 
@@ -8,6 +11,7 @@ class ChatRequest(BaseSchema):
 
     Attributes:
         user_id (str): The ID of the user initiating the chat.
+
     """
 
     user_id: str
@@ -20,6 +24,7 @@ class ChatMessageRequest(BaseSchema):
         chat_id (str): The ID of the chat session to which the message belongs.
         content (str): The content of the chat message.
         role (ChatRole): The role of the message sender (user, assistant, system).
+
     """
 
     chat_id: str
@@ -36,6 +41,7 @@ class ChatMessageResponse(BaseSchema):
         role (ChatRole): The role of the message sender (user, assistant, system).
         content (str): The content of the chat message.
         created_at (str): Timestamp when the chat message was created.
+
     """
 
     id: str
@@ -43,7 +49,7 @@ class ChatMessageResponse(BaseSchema):
     role: ChatRole
     content: str
     created_at: datetime
-    
+
 
 class ChatResponse(BaseSchema):
     """Schema for chat response data.
@@ -54,6 +60,7 @@ class ChatResponse(BaseSchema):
         created_at (datetime): Timestamp when the chat session was created.
         updated_at (datetime): Timestamp when the chat session was last updated.
         messages (list[ChatMessageResponse]): List of messages in the chat session.
+
     """
 
     id: str

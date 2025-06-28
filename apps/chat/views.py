@@ -4,7 +4,6 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 
-from apps.chat.models import ChatMessage
 from core.repositories import ChatRepository
 from core.schemas.chat import ChatResponse
 
@@ -29,12 +28,9 @@ def chat_view(request: HttpRequest) -> HttpResponse:
 
     chats = ChatRepository.get_all_chats(user_id=request.user.id)
 
-    response:list[ChatResponse] = []
+    response: list[ChatResponse] = []
 
     for chat in chats:
-        response.append(
-            ChatRepository.map_chat_to_response(chat)
-        )
-
+        response.append(ChatRepository.map_chat_to_response(chat))
 
     return render(request, "chat.html", {"chats": response})

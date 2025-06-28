@@ -1,52 +1,76 @@
+"""Enums of project."""
+
 from enum import Enum
 
 
 class BaseEnum(Enum):
-    """
-    Base Enum class to ensure all enums in the project inherit from this.
-    This can be extended with common functionality for all enums if needed.
-    """
+    """Base Enum class to ensure all enums in the project inherit from this."""
 
     @classmethod
     def choices(cls):
-        """
-        Returns a list of tuples containing the enum name and value.
-        This is useful for creating choices in Django models or forms.
+        """Possibles choices of enum.
+
+        Return:
+            list[str]: Values of Enum
+
         """
         return [(item.name, item.value) for item in cls]
-    
+
     @classmethod
     def keys(cls):
-        """
-        Returns a list of enum names.
-        This can be useful for iterating over enum names.
+        """Possibles keys of enum.
+
+        Return:
+            list[str]: Names of Enum
+
         """
         return [item.name for item in cls]
-    
+
     @classmethod
     def values(cls):
-        """
-        Returns a list of enum values.
-        This can be useful for iterating over enum values.
+        """Values of enum.
+
+        Return:
+            list[str]: Values of Enum
+
         """
         return [item.value for item in cls]
 
     def __str__(self):
+        """Representation of the enum instance like a string.
+
+        Args:
+            None:
+
+        Return:
+            str: The string representation of the enum value.
+
+        """
         return str(self.value)
 
     def __repr__(self):
+        """Representation of the enum instance.
+
+        Args:
+            None:
+
+        Return:
+            str: A string representation of the enum instance.
+
+        """
         return f"{self.__class__.__name__}.{self.name}({self.value})"
 
 
 class ChatRole(BaseEnum):
-    """
-    Enum representing the role of a message in a chat session.
+    """Enum representing the role of a message in a chat session.
 
     Attributes:
         USER: Represents a message sent by the user.
         ASSISTANT: Represents a message sent by the assistant.
         SYSTEM: Represents a system message.
+
     """
+
     USER = "user"
     ASSISTANT = "assistant"
     SYSTEM = "system"

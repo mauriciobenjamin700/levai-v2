@@ -1,16 +1,32 @@
+"""Function to download a video using yt-dlp."""
+
+from os.path import abspath, dirname
+
 from yt_dlp import YoutubeDL
 
 
-def download_video(video_url: str, output_dir: str, file_name: str) -> None:
+def download_video(video_url: str) -> True:
+    """Download a video from a given URL using yt-dlp.
 
-    # Configurações para o download
-    ydl_opts = {
-        'format': 'bestvideo+bestaudio/best',  # Melhor qualidade de vídeo e áudio
-        'outtmpl': f'{output_dir}/{file_name}',         # Nome e diretório do arquivo
-    }
+    Args:
+        video_url (str): The URL of the video to download.
 
-    # Realizar o download
-    with YoutubeDL(ydl_opts) as ydl:
-        ydl.download([video_url])
+    Returns:
+        bool: True if the download was successful, False otherwise.
 
-    print("Download concluído!")
+    """
+    try:
+
+        ydl_opts = {
+            "format": "bestvideo+bestaudio/best",
+            "outtmpl": f"{abspath(dirname(abspath(__file__)))}/video",
+        }
+
+        with YoutubeDL(ydl_opts) as ydl:
+            ydl.download([video_url])
+
+        return True
+
+    except Exception as e:
+        print("Error: ", e)
+        return False

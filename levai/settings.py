@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "apps.chat",
     "apps.home",
     "apps.document",
+    "apps.video",
 ]
 
 MIDDLEWARE = [
