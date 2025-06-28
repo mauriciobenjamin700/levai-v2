@@ -1,14 +1,81 @@
-<div id="searchContainer" class="searchContainer">
-    <textarea id="search" placeholder="Pergunte o que quiser..." rows="3"></textarea>
-    <div class="buttonContainer">
-        <button id="search-button" class="btn btn-primary" title="Upload de documento">
-            📄
-        </button>
-        <button id="clear-button" class="btn btn-secondary" title="Enviar áudio">
-            🎤
-        </button>
-        <button id="send-button" class="btn btn-success" title="Enviar pergunta">
-            <a href="/chat">➡️</a>
-        </button>
+<form id="chatForm" method="post" action="/chat/" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div id="searchContainer" class="searchContainer">
+        <!-- Campo de texto obrigatório -->
+        <textarea id="search" name="message" placeholder="Pergunte o que quiser..." rows="3" required></textarea>
+        
+        <!-- Campos ocultos para arquivo e áudio -->
+        <input type="file" id="document" name="document" accept=".pdf,.txt,.doc,.docx" style="display: none;">
+        <input type="file" id="audio" name="audio" accept="audio/*" style="display: none;">
+        
+        <div class="buttonContainer">
+            <!-- Botão para selecionar documento -->
+            <button type="button" id="search-button" class="btn btn-primary" title="Upload de documento">
+                📄
+            </button>
+            
+            <!-- Botão para selecionar áudio -->
+            <button type="button" id="clear-button" class="btn btn-secondary" title="Enviar áudio">
+                🎤
+            </button>
+            
+            <!-- Botão de envio -->
+            <button type="submit" id="send-button" class="btn btn-success" title="Enviar pergunta">
+                ➡️
+            </button>
+        </div>
+        
+        <!-- Indicadores de arquivos selecionados -->
+        <div id="fileIndicators" style="margin-top: 10px;">
+            <span id="documentIndicator" style="display: none;">📄 Documento selecionado</span>
+            <span id="audioIndicator" style="display: none;">🎤 Áudio selecionado</span>
+        </div>
     </div>
-</div>
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Botão de documento
+    document.getElementById('search-button').addEventListener('click', function() {
+        document.getElementById('document').click();
+    });
+    
+    // Botão de áudio
+    document.getElementById('clear-button').addEventListener('click', function() {
+        document.getElementById('audio').click();
+    });
+    
+    // Mostrar indicador quando documento for selecionado
+    document.getElementById('document').addEventListener('change', function() {
+        const indicator = document.getElementById('documentIndicator');
+        if (this.files.length > 0) {
+            indicator.style.display = 'inline';
+            indicator.textContent = `📄 ${this.files[0].name}`;
+        } else {
+            indicator.style.display = 'none';
+        }
+    });
+    
+    // Mostrar indicador quando áudio for selecionado
+    document.getElementById('audio').addEventListener('change', function() {
+        const indicator = document.getElementById('audioIndicator');
+        if (this.files.length > 0) {
+            indicator.style.display = 'inline';
+            indicator.textContent = `🎤 ${this.files[0].name}`;
+        } else {
+            indicator.style.display = 'none';
+        }
+    });
+    
+    // Validação do formulário
+    document.getElementById('chatForm').addEventListener('submit', function(e) {
+        const message = document.getElementById('search').value.trim();
+        
+        if (!message) {
+            e.preventDefault();
+            alert('Por favor, digite uma mensagem!');
+            return false;
+        }
+    });
+});
+</script>

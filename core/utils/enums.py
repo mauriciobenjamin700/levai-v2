@@ -74,3 +74,20 @@ class ChatRole(BaseEnum):
     USER = "user"
     ASSISTANT = "assistant"
     SYSTEM = "system"
+
+
+class UploadDirs(BaseEnum):
+    """Enum representing the directories for file uploads.
+
+    Attributes:
+        DOCUMENTS: Directory for document uploads.
+        VIDEOS: Directory for video uploads.
+        IMAGES: Directory for image uploads.
+        AUDIO: Directory for audio uploads.
+
+    """
+
+    DOCUMENTS = "documents"
+    VIDEOS = "videos"
+    IMAGES = "images"
+    AUDIO = "audio"
