@@ -4,14 +4,26 @@
         <!-- Campo de texto obrigatório -->
         <textarea id="search" name="message" placeholder="Pergunte o que quiser..." rows="3" required></textarea>
         
-        <!-- Campos ocultos para arquivo e áudio -->
-        <input type="file" id="document" name="document" accept=".pdf,.txt,.doc,.docx" style="display: none;">
+        <!-- Campos ocultos para todos os tipos de arquivo -->
+        <input type="file" id="document" name="document" accept=".pdf,.txt,.doc,.docx,.csv,.json" style="display: none;">
         <input type="file" id="audio" name="audio" accept="audio/*" style="display: none;">
+        <input type="file" id="image" name="image" accept="image/*" style="display: none;">
+        <input type="file" id="video" name="video" accept="video/*" style="display: none;">
         
         <div class="buttonContainer">
             <!-- Botão para selecionar documento -->
             <button type="button" id="search-button" class="btn btn-primary" title="Upload de documento">
                 📄
+            </button>
+            
+            <!-- Botão para selecionar imagem -->
+            <button type="button" id="image-button" class="btn btn-info" title="Upload de imagem">
+                🖼️
+            </button>
+            
+            <!-- Botão para selecionar vídeo -->
+            <button type="button" id="video-button" class="btn btn-purple" title="Upload de vídeo">
+                🎬
             </button>
             
             <!-- Botão para selecionar áudio de arquivo -->
@@ -33,8 +45,22 @@
         <!-- Indicadores de arquivos selecionados -->
         <div id="fileIndicators" style="margin-top: 10px;">
             <span id="documentIndicator" style="display: none;">📄 Documento selecionado</span>
+            <span id="imageIndicator" style="display: none;">🖼️ Imagem selecionada</span>
+            <span id="videoIndicator" style="display: none;">🎬 Vídeo selecionado</span>
             <span id="audioIndicator" style="display: none;">🎤 Áudio selecionado</span>
             <span id="recordingIndicator" style="display: none; color: red;">🔴 Gravando...</span>
+        </div>
+        
+        <!-- Preview de imagem -->
+        <div id="imagePreview" style="display: none; margin-top: 10px;">
+            <img id="previewImg" style="max-width: 200px; max-height: 200px; border-radius: 8px;">
+            <button type="button" id="deleteImage" class="btn btn-danger btn-sm">🗑️ Remover</button>
+        </div>
+        
+        <!-- Preview de vídeo -->
+        <div id="videoPreview" style="display: none; margin-top: 10px;">
+            <video id="previewVideo" controls style="max-width: 300px; max-height: 200px;"></video>
+            <button type="button" id="deleteVideo" class="btn btn-danger btn-sm">🗑️ Remover</button>
         </div>
         
         <!-- Player para reproduzir áudio gravado -->
@@ -51,12 +77,19 @@ document.addEventListener('DOMContentLoaded', function() {
     let recordedChunks = [];
     let recordedBlob = null;
     
-    // Botão de documento
+    // Botões de seleção de arquivo
     document.getElementById('search-button').addEventListener('click', function() {
         document.getElementById('document').click();
     });
     
-    // Botão de upload de áudio
+    document.getElementById('image-button').addEventListener('click', function() {
+        document.getElementById('image').click();
+    });
+    
+    document.getElementById('video-button').addEventListener('click', function() {
+        document.getElementById('video').click();
+    });
+    
     document.getElementById('upload-audio-button').addEventListener('click', function() {
         document.getElementById('audio').click();
     });
@@ -64,20 +97,96 @@ document.addEventListener('DOMContentLoaded', function() {
     // Botão de gravar áudio
     document.getElementById('record-button').addEventListener('click', function() {
         if (mediaRecorder && mediaRecorder.state === 'recording') {
-            // Parar gravação
             stopRecording();
         } else {
-            // Iniciar gravação
             startRecording();
         }
     });
     
-    // Botão para excluir gravação
+    // Botões de remover
     document.getElementById('deleteRecording').addEventListener('click', function() {
         deleteRecording();
     });
     
-    // Função para iniciar gravação
+    document.getElementById('deleteImage').addEventListener('click', function() {
+        deleteImage();
+    });
+    
+    document.getElementById('deleteVideo').addEventListener('click', function() {
+        deleteVideo();
+    });
+    
+    // Event listeners para arquivos
+    
+    // Documento
+    document.getElementById('document').addEventListener('change', function() {
+        const indicator = document.getElementById('documentIndicator');
+        if (this.files.length > 0) {
+            indicator.style.display = 'inline';
+            indicator.textContent = `📄 ${this.files[0].name}`;
+        } else {
+            indicator.style.display = 'none';
+        }
+    });
+    
+    // Imagem
+    document.getElementById('image').addEventListener('change', function() {
+        const indicator = document.getElementById('imageIndicator');
+        const preview = document.getElementById('imagePreview');
+        const img = document.getElementById('previewImg');
+        
+        if (this.files.length > 0) {
+            const file = this.files[0];
+            indicator.style.display = 'inline';
+            indicator.textContent = `🖼️ ${file.name}`;
+            
+            // Mostrar preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                img.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            indicator.style.display = 'none';
+            preview.style.display = 'none';
+        }
+    });
+    
+    // Vídeo
+    document.getElementById('video').addEventListener('change', function() {
+        const indicator = document.getElementById('videoIndicator');
+        const preview = document.getElementById('videoPreview');
+        const video = document.getElementById('previewVideo');
+        
+        if (this.files.length > 0) {
+            const file = this.files[0];
+            indicator.style.display = 'inline';
+            indicator.textContent = `🎬 ${file.name}`;
+            
+            // Mostrar preview
+            const url = URL.createObjectURL(file);
+            video.src = url;
+            preview.style.display = 'block';
+        } else {
+            indicator.style.display = 'none';
+            preview.style.display = 'none';
+        }
+    });
+    
+    // Áudio
+    document.getElementById('audio').addEventListener('change', function() {
+        const indicator = document.getElementById('audioIndicator');
+        if (this.files.length > 0) {
+            indicator.style.display = 'inline';
+            indicator.textContent = `🎵 ${this.files[0].name}`;
+            deleteRecording(); // Limpar gravação se houver
+        } else {
+            indicator.style.display = 'none';
+        }
+    });
+    
+    // Funções de gravação de áudio (mantidas do código anterior)
     async function startRecording() {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -93,23 +202,19 @@ document.addEventListener('DOMContentLoaded', function() {
             mediaRecorder.onstop = function() {
                 recordedBlob = new Blob(recordedChunks, { type: 'audio/wav' });
                 
-                // Mostrar player
                 const audioPlayer = document.getElementById('recordedAudio');
                 audioPlayer.src = URL.createObjectURL(recordedBlob);
                 document.getElementById('audioPlayer').style.display = 'block';
                 
-                // Atualizar indicadores
                 document.getElementById('recordingIndicator').style.display = 'none';
                 document.getElementById('audioIndicator').style.display = 'inline';
                 document.getElementById('audioIndicator').textContent = '🎤 Áudio gravado';
                 
-                // Parar stream
                 stream.getTracks().forEach(track => track.stop());
             };
             
             mediaRecorder.start();
             
-            // Atualizar UI
             document.getElementById('record-button').innerHTML = '⏹️';
             document.getElementById('record-button').title = 'Parar gravação';
             document.getElementById('recordingIndicator').style.display = 'inline';
@@ -119,52 +224,34 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Função para parar gravação
     function stopRecording() {
         if (mediaRecorder && mediaRecorder.state === 'recording') {
             mediaRecorder.stop();
-            
-            // Restaurar botão
             document.getElementById('record-button').innerHTML = '🎤';
             document.getElementById('record-button').title = 'Gravar áudio';
         }
     }
     
-    // Função para excluir gravação
+    // Funções de remoção
     function deleteRecording() {
         recordedBlob = null;
         document.getElementById('audioPlayer').style.display = 'none';
         document.getElementById('audioIndicator').style.display = 'none';
         document.getElementById('recordingIndicator').style.display = 'none';
-        
-        // Limpar input de áudio também
         document.getElementById('audio').value = '';
     }
     
-    // Mostrar indicador quando documento for selecionado
-    document.getElementById('document').addEventListener('change', function() {
-        const indicator = document.getElementById('documentIndicator');
-        if (this.files.length > 0) {
-            indicator.style.display = 'inline';
-            indicator.textContent = `📄 ${this.files[0].name}`;
-        } else {
-            indicator.style.display = 'none';
-        }
-    });
+    function deleteImage() {
+        document.getElementById('image').value = '';
+        document.getElementById('imagePreview').style.display = 'none';
+        document.getElementById('imageIndicator').style.display = 'none';
+    }
     
-    // Mostrar indicador quando áudio de arquivo for selecionado
-    document.getElementById('audio').addEventListener('change', function() {
-        const indicator = document.getElementById('audioIndicator');
-        if (this.files.length > 0) {
-            indicator.style.display = 'inline';
-            indicator.textContent = `🎵 ${this.files[0].name}`;
-            
-            // Limpar gravação se houver
-            deleteRecording();
-        } else {
-            indicator.style.display = 'none';
-        }
-    });
+    function deleteVideo() {
+        document.getElementById('video').value = '';
+        document.getElementById('videoPreview').style.display = 'none';
+        document.getElementById('videoIndicator').style.display = 'none';
+    }
     
     // Validação e envio do formulário
     document.getElementById('chatForm').addEventListener('submit', function(e) {

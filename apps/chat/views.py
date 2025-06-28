@@ -26,6 +26,8 @@ def chat_view(request: HttpRequest) -> HttpResponse:
         message = request.POST.get('message')
         document = request.FILES.get('document')
         audio = request.FILES.get('audio')
+        image = request.FILES.get('image')
+        video = request.FILES.get('video')
         
         # Validação
         if not message:
@@ -39,6 +41,20 @@ def chat_view(request: HttpRequest) -> HttpResponse:
                 # Processar documento
                 print(f"Documento recebido: {document.name}")
                 save_uploaded_file(document, UploadDirs.DOCUMENTS)
+
+            if image:
+                # Processar imagem
+                image_path = save_uploaded_file(image, UploadDirs.IMAGES)
+                print(f"Imagem salva em: {image_path}")
+                print(f"Tipo de imagem: {image.content_type}")
+                print(f"Tamanho: {image.size} bytes")
+
+            if video:
+                # Processar vídeo
+                video_path = save_uploaded_file(video, UploadDirs.VIDEOS)
+                print(f"Vídeo salvo em: {video_path}")
+                print(f"Tipo de vídeo: {video.content_type}")
+                print(f"Tamanho: {video.size} bytes")
             
             # Processar áudio se enviado
             if audio:

@@ -21,3 +21,19 @@
     0%, 50% { opacity: 1; }
     51%, 100% { opacity: 0.3; }
 }
+
+/* Adicionar ao seu CSS */
+.btn-info { background-color: #17a2b8; color: white; }
+.btn-purple { background-color: #6f42c1; color: white; }
+
+#imagePreview, #videoPreview {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+#previewImg, #previewVideo {
+    display: block;
+    margin-bottom: 10px;
+}
