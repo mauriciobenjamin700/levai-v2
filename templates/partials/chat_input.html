@@ -14,8 +14,13 @@
                 📄
             </button>
             
-            <!-- Botão para selecionar áudio -->
-            <button type="button" id="clear-button" class="btn btn-secondary" title="Enviar áudio">
+            <!-- Botão para selecionar áudio de arquivo -->
+            <button type="button" id="upload-audio-button" class="btn btn-secondary" title="Upload de áudio">
+                🎵
+            </button>
+            
+            <!-- Botão para gravar áudio -->
+            <button type="button" id="record-button" class="btn btn-warning" title="Gravar áudio">
                 🎤
             </button>
             
@@ -29,21 +34,112 @@
         <div id="fileIndicators" style="margin-top: 10px;">
             <span id="documentIndicator" style="display: none;">📄 Documento selecionado</span>
             <span id="audioIndicator" style="display: none;">🎤 Áudio selecionado</span>
+            <span id="recordingIndicator" style="display: none; color: red;">🔴 Gravando...</span>
+        </div>
+        
+        <!-- Player para reproduzir áudio gravado -->
+        <div id="audioPlayer" style="display: none; margin-top: 10px;">
+            <audio controls id="recordedAudio"></audio>
+            <button type="button" id="deleteRecording" class="btn btn-danger btn-sm">🗑️ Excluir</button>
         </div>
     </div>
 </form>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    let mediaRecorder;
+    let recordedChunks = [];
+    let recordedBlob = null;
+    
     // Botão de documento
     document.getElementById('search-button').addEventListener('click', function() {
         document.getElementById('document').click();
     });
     
-    // Botão de áudio
-    document.getElementById('clear-button').addEventListener('click', function() {
+    // Botão de upload de áudio
+    document.getElementById('upload-audio-button').addEventListener('click', function() {
         document.getElementById('audio').click();
     });
+    
+    // Botão de gravar áudio
+    document.getElementById('record-button').addEventListener('click', function() {
+        if (mediaRecorder && mediaRecorder.state === 'recording') {
+            // Parar gravação
+            stopRecording();
+        } else {
+            // Iniciar gravação
+            startRecording();
+        }
+    });
+    
+    // Botão para excluir gravação
+    document.getElementById('deleteRecording').addEventListener('click', function() {
+        deleteRecording();
+    });
+    
+    // Função para iniciar gravação
+    async function startRecording() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            recordedChunks = [];
+            
+            mediaRecorder.ondataavailable = function(event) {
+                if (event.data.size > 0) {
+                    recordedChunks.push(event.data);
+                }
+            };
+            
+            mediaRecorder.onstop = function() {
+                recordedBlob = new Blob(recordedChunks, { type: 'audio/wav' });
+                
+                // Mostrar player
+                const audioPlayer = document.getElementById('recordedAudio');
+                audioPlayer.src = URL.createObjectURL(recordedBlob);
+                document.getElementById('audioPlayer').style.display = 'block';
+                
+                // Atualizar indicadores
+                document.getElementById('recordingIndicator').style.display = 'none';
+                document.getElementById('audioIndicator').style.display = 'inline';
+                document.getElementById('audioIndicator').textContent = '🎤 Áudio gravado';
+                
+                // Parar stream
+                stream.getTracks().forEach(track => track.stop());
+            };
+            
+            mediaRecorder.start();
+            
+            // Atualizar UI
+            document.getElementById('record-button').innerHTML = '⏹️';
+            document.getElementById('record-button').title = 'Parar gravação';
+            document.getElementById('recordingIndicator').style.display = 'inline';
+            
+        } catch (error) {
+            alert('Erro ao acessar microfone: ' + error.message);
+        }
+    }
+    
+    // Função para parar gravação
+    function stopRecording() {
+        if (mediaRecorder && mediaRecorder.state === 'recording') {
+            mediaRecorder.stop();
+            
+            // Restaurar botão
+            document.getElementById('record-button').innerHTML = '🎤';
+            document.getElementById('record-button').title = 'Gravar áudio';
+        }
+    }
+    
+    // Função para excluir gravação
+    function deleteRecording() {
+        recordedBlob = null;
+        document.getElementById('audioPlayer').style.display = 'none';
+        document.getElementById('audioIndicator').style.display = 'none';
+        document.getElementById('recordingIndicator').style.display = 'none';
+        
+        // Limpar input de áudio também
+        document.getElementById('audio').value = '';
+    }
     
     // Mostrar indicador quando documento for selecionado
     document.getElementById('document').addEventListener('change', function() {
@@ -56,18 +152,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Mostrar indicador quando áudio for selecionado
+    // Mostrar indicador quando áudio de arquivo for selecionado
     document.getElementById('audio').addEventListener('change', function() {
         const indicator = document.getElementById('audioIndicator');
         if (this.files.length > 0) {
             indicator.style.display = 'inline';
-            indicator.textContent = `🎤 ${this.files[0].name}`;
+            indicator.textContent = `🎵 ${this.files[0].name}`;
+            
+            // Limpar gravação se houver
+            deleteRecording();
         } else {
             indicator.style.display = 'none';
         }
     });
     
-    // Validação do formulário
+    // Validação e envio do formulário
     document.getElementById('chatForm').addEventListener('submit', function(e) {
         const message = document.getElementById('search').value.trim();
         
@@ -75,6 +174,14 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             alert('Por favor, digite uma mensagem!');
             return false;
+        }
+        
+        // Se há áudio gravado, criar arquivo e adicionar ao form
+        if (recordedBlob) {
+            const file = new File([recordedBlob], 'recorded_audio.wav', { type: 'audio/wav' });
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            document.getElementById('audio').files = dataTransfer.files;
         }
     });
 });

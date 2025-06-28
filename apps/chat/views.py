@@ -43,8 +43,10 @@ def chat_view(request: HttpRequest) -> HttpResponse:
             # Processar áudio se enviado
             if audio:
                 # Processar áudio
-                print(f"Áudio recebido: {audio.name}")
-                save_uploaded_file(document, UploadDirs.AUDIO)
+                audio_path = save_uploaded_file(audio, UploadDirs.AUDIO)
+                print(f"Áudio salvo em: {audio_path}")
+                print(f"Tipo de áudio: {audio.content_type}")
+                print(f"Tamanho: {audio.size} bytes")
             
             # Processar mensagem
             print(f"Mensagem: {message}")
