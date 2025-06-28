@@ -5,32 +5,34 @@
     <meta charset="UTF-8">
     <title>Downloader Youtube Videos</title>
     <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
 </head>
 <body>
-    <h1>Downloader Youtube Videos</h1>
-    <form method="post">
-        {% csrf_token %}
-        <label for="url">URL do vídeo:</label>
-        <input type="text" id="url" name="url" required>
-        <br>
-        <label for="file_name">Nome do arquivo:</label>
-        <input type="text" id="file_name" name="file_name" required>
-        <br>
-        <button type="submit">Baixar</button>
-    </form>
-    {% if filename %}
-        <div class="download-link">
-            <a href="{% url 'serve_video' filename=filename %}" download>
-                📥 Baixar Vídeo
-            </a>
+    <div id="container" class="container">
+        {% include "partials/header.html" %}
+        {% include "partials/sidebar.html" %}
+        <div id="content" class="content">
+            <h2>Downloader Youtube Videos</h2>
+            <div class="formContainer">
+                <form method="post">
+                    {% csrf_token %}
+                    <label for="url">URL do vídeo:</label>
+                    <input type="text" id="url" name="url" required>
+                    <br>
+                    <label for="file_name">Nome do arquivo:</label>
+                    <input type="text" id="file_name" name="file_name" required>
+                    <br>
+                    <button type="submit">📥 Baixar</button>
+                </form>
+                {% if messages %}
+                    <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
         </div>
-    {% endif %}
-    {% if messages %}
-        <ul>
-        {% for message in messages %}
-            <li>{{ message }}</li>
-        {% endfor %}
-        </ul>
-    {% endif %}
+    </div>
 </body>
 </html>
