@@ -18,6 +18,13 @@
         <br>
         <button type="submit">Baixar</button>
     </form>
+    {% if filename %}
+        <div class="download-link">
+            <a href="{% url 'serve_video' filename=filename %}" download>
+                📥 Baixar Vídeo
+            </a>
+        </div>
+    {% endif %}
     {% if messages %}
         <ul>
         {% for message in messages %}
