@@ -1,0 +1,308 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Converter Vídeo para Áudio</title>
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+</head>
+<body>
+    <div id="container" class="container">
+        {% include "partials/header.html" %}
+        {% include "partials/sidebar.html" %}
+        
+        <div id="content" class="content">
+            <h2>🎵 Converter Vídeo para Áudio MP3</h2>
+            
+            <!-- Mensagens de feedback -->
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            <div class="formContainer">
+                <form method="post" enctype="multipart/form-data" id="videoForm">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label for="video">📹 Selecione o vídeo:</label>
+                        <input type="file" 
+                               id="video" 
+                               name="video" 
+                               accept="video/*" 
+                               required>
+                        <small class="help-text">
+                            Formatos aceitos: MP4, AVI, MKV, MOV, WMV, FLV
+                        </small>
+                    </div>
+                    
+                    <!-- Preview do vídeo -->
+                    <div id="videoPreview" style="display: none; margin: 20px 0;">
+                        <h4>📽️ Preview do Vídeo:</h4>
+                        <video id="previewVideo" 
+                               controls 
+                               style="max-width: 100%; max-height: 300px; border-radius: 8px;">
+                        </video>
+                        <p id="videoInfo" style="margin-top: 10px; color: #666;"></p>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button type="submit" 
+                                id="convertBtn" 
+                                class="btn btn-primary">
+                            🎵 Converter para MP3
+                        </button>
+                        
+                        <button type="button" 
+                                id="clearBtn" 
+                                class="btn btn-secondary">
+                            🗑️ Limpar
+                        </button>
+                    </div>
+                    
+                    <!-- Indicador de progresso -->
+                    <div id="loadingIndicator" style="display: none; margin-top: 20px;">
+                        <div class="loading-spinner"></div>
+                        <p>Convertendo vídeo... Por favor, aguarde.</p>
+                    </div>
+                </form>
+                
+                <!-- Instruções -->
+                <div class="instructions">
+                    <h3>📋 Como usar:</h3>
+                    <ol>
+                        <li>Clique em "Selecione o vídeo" e escolha seu arquivo</li>
+                        <li>Visualize o preview (opcional)</li>
+                        <li>Clique em "Converter para MP3"</li>
+                        <li>O download do áudio MP3 iniciará automaticamente</li>
+                    </ol>
+                    
+                    <div class="features">
+                        <h4>✨ Recursos:</h4>
+                        <ul>
+                            <li>🎯 Conversão rápida e de qualidade</li>
+                            <li>📱 Suporte a diversos formatos</li>
+                            <li>🔊 Áudio em 192kbps</li>
+                            <li>📥 Download automático</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const videoInput = document.getElementById('video');
+        const videoPreview = document.getElementById('videoPreview');
+        const previewVideo = document.getElementById('previewVideo');
+        const videoInfo = document.getElementById('videoInfo');
+        const convertBtn = document.getElementById('convertBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const videoForm = document.getElementById('videoForm');
+        
+        // Preview do vídeo quando selecionado
+        videoInput.addEventListener('change', function() {
+            const file = this.files[0];
+            
+            if (file) {
+                // Mostrar preview
+                const url = URL.createObjectURL(file);
+                previewVideo.src = url;
+                videoPreview.style.display = 'block';
+                
+                // Mostrar informações do arquivo
+                const fileSizeMB = (file.size / 1024 / 1024).toFixed(2);
+                videoInfo.textContent = `📁 ${file.name} - 💾 ${fileSizeMB} MB`;
+                
+                // Habilitar botão de conversão
+                convertBtn.disabled = false;
+            } else {
+                // Esconder preview
+                videoPreview.style.display = 'none';
+                convertBtn.disabled = true;
+            }
+        });
+        
+        // Botão limpar
+        clearBtn.addEventListener('click', function() {
+            videoInput.value = '';
+            videoPreview.style.display = 'none';
+            convertBtn.disabled = true;
+            loadingIndicator.style.display = 'none';
+        });
+        
+        // Envio do formulário
+        videoForm.addEventListener('submit', function(e) {
+            if (!videoInput.files.length) {
+                e.preventDefault();
+                alert('Por favor, selecione um vídeo!');
+                return;
+            }
+            
+            // Mostrar indicador de carregamento
+            loadingIndicator.style.display = 'block';
+            convertBtn.disabled = true;
+            convertBtn.textContent = '⏳ Convertendo...';
+            
+            // O formulário será enviado normalmente
+        });
+        
+        // Verificar se há mensagens de erro para esconder loading
+        {% if messages %}
+            loadingIndicator.style.display = 'none';
+            convertBtn.disabled = false;
+            convertBtn.textContent = '🎵 Converter para MP3';
+        {% endif %}
+    });
+    </script>
+
+    <style>
+    .formContainer {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        /* background: #f9f9f9; */
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #333;
+    }
+    
+    .form-group input[type="file"] {
+        width: 100%;
+        padding: 10px;
+        border: 2px dashed #ccc;
+        border-radius: 5px;
+        /* background: white; */
+        cursor: pointer;
+    }
+    
+    .form-group input[type="file"]:hover {
+        border-color: #007bff;
+    }
+    
+    .help-text {
+        display: block;
+        margin-top: 5px;
+        color: #666;
+        font-size: 0.9em;
+    }
+    
+    .button-group {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin: 20px 0;
+    }
+    
+    .btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 6px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary {
+        background: #007bff;
+        color: white;
+    }
+    
+    .btn-primary:hover:not(:disabled) {
+        background: #0056b3;
+    }
+    
+    .btn-secondary {
+        background: #6c757d;
+        color: white;
+    }
+    
+    .btn-secondary:hover {
+        background: #545b62;
+    }
+    
+    .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    
+    .loading-spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #007bff;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    .instructions {
+        margin-top: 30px;
+        padding: 20px;
+        /* background: white; */
+        border-radius: 8px;
+        border-left: 4px solid #007bff;
+    }
+    
+    .features ul {
+        list-style: none;
+        padding: 0;
+    }
+    
+    .features li {
+        margin: 8px 0;
+        padding-left: 20px;
+    }
+    
+    .alert {
+        padding: 12px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+        border-left: 4px solid;
+    }
+    
+    .alert-success {
+        background: #d4edda;
+        border-color: #28a745;
+        color: #155724;
+    }
+    
+    .alert-error {
+        background: #f8d7da;
+        border-color: #dc3545;
+        color: #721c24;
+    }
+    
+    #videoPreview {
+        text-align: center;
+        padding: 20px;
+        background: white;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+    }
+    </style>
+</body>
+</html>
