@@ -1,5 +1,15 @@
-<form id="chatForm" method="post" action="/chat/" enctype="multipart/form-data">
+<form 
+    id="chatForm" 
+    method="post" 
+    action="{% if chat %}/chat/{{ chat.id }}/{% else %}/chat/{% endif %}" 
+    enctype="multipart/form-data">
     {% csrf_token %}
+
+     <!-- ✅ Campo hidden com chat_id se existir -->
+    {% if chat %}
+        <input type="hidden" name="chat_id" value="{{ chat.id }}">
+    {% endif %}
+
     <div id="searchContainer" class="searchContainer">
         <!-- Campo de texto obrigatório -->
         <textarea id="search" name="message" placeholder="Pergunte o que quiser..." rows="3" required></textarea>
@@ -37,8 +47,12 @@
             </button>
             
             <!-- Botão de envio -->
-            <button type="submit" id="send-button" class="btn btn-success" title="Enviar pergunta">
-                ➡️
+            <button 
+                type="submit" 
+                id="send-button" 
+                class="btn btn-success" 
+                title="{% if chat %}Enviar mensagem{% else %}Iniciar chat{% endif %}">
+                {% if chat %}📤{% else %}🆕{% endif %}
             </button>
         </div>
         

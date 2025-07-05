@@ -1,6 +1,7 @@
 """Chat repository."""
 
 from apps.chat.models import Chat, ChatMessage
+from apps.user.models import User
 from core.schemas import (
     ChatMessageRequest,
     ChatMessageResponse,
@@ -14,17 +15,18 @@ class ChatRepository:
     """Repository for managing chat sessions and messages."""
 
     @staticmethod
-    def create_chat(user_id: str) -> Chat:
+    def create_chat(user: User, title: SyntaxError) -> Chat:
         """Create a new chat session for a user.
 
         Args:
-            user_id (str): The ID of the user starting the chat.
+            user (User): The user who owns the chat session.
+            title (str): The title of the chat session.
 
         Returns:
             Chat: The created chat session.
 
         """
-        chat = Chat(user_id=user_id)
+        chat = Chat(user=user, title=title)
         return chat
 
     @staticmethod
@@ -111,52 +113,71 @@ class ChatRepository:
         return True
 
     @staticmethod
-    def create_chat_message(chat_id: str, role: str, content: str) -> ChatMessage:
+    def create_chat_message(chat: Chat, role: ChatRole, content: str) -> ChatMessage:
         """Create a new chat message in a chat session.
 
         Args:
-            chat_id (str): The ID of the chat session.
-            role (str): The role of the message sender (user, assistant, system).
+            chat (Chat): The chat session.
+            role (ChatRole): The role of the message sender (user, assistant, system).
             content (str): The content of the message.
 
         Returns:
             ChatMessage: The created chat message.
 
         """
-        if role not in ChatRole.values():
-            raise ValueError(
-                f"Invalid role: {role}. Must be one of {ChatRole.values()}."
-            )
-
-        message = ChatMessage(chat_id=chat_id, role=role, content=content)
+        message = ChatMessage(chat=chat, role=role.value, content=content)
         return message
 
     @staticmethod
     def add_chat_message(model: ChatMessage) -> ChatMessage:
-        """Add a new chat message to the database.
+        """Add a new chat message to the database."""
+        try:
+            print("=== DEBUG ADD_CHAT_MESSAGE ===")
+            print(f"model: {model}")
+            print(f"model.chat: {model.chat}")
+            print(f"model.role: {model.role}")
+            print(f"model.content: {model.content[:50]}...")
 
-        Args:
-            model (ChatMessage): The chat message model instance to be added.
+            # Verificar role
+            print(f"ChatRole.values(): {ChatRole.values()}")
+            print(f"model.role in ChatRole.values(): {model.role in ChatRole.values()}")
 
-        Returns:
-            ChatMessage: The added chat message model instance.
+            if model.role not in ChatRole.values():
+                error_msg = (
+                    f"Invalid role: {model.role}. Must be one of {ChatRole.values()}."
+                )
+                print(f"ERRO DE ROLE: {error_msg}")
+                raise ValueError(error_msg)
 
-        """
-        if model.role not in ChatRole.values():
-            raise ValueError(
-                f"Invalid role: {model.role}. Must be one of {ChatRole.values()}."
-            )
+            # Verificar se chat existe
+            chat_exists = Chat.objects.filter(id=model.chat.id).exists()
+            print(f"Chat exists: {chat_exists}")
 
-        chat_id = model.chat_id
+            if not chat_exists:
+                error_msg = f"Chat with ID {model.chat.id} does not exist."
+                print(f"ERRO DE CHAT: {error_msg}")
+                raise ValueError(error_msg)
 
-        if not Chat.objects.filter(id=chat_id).exists():
-            raise ValueError(f"Chat with ID {chat_id} does not exist.")
+            print("Executando full_clean()...")
+            model.full_clean()
+            print("full_clean() OK")
 
-        model.full_clean()
+            print("Executando save()...")
+            model.save()
+            print("save() OK")
 
-        model.save()
+            print("=== ADD_CHAT_MESSAGE SUCCESS ===")
+            return model
 
-        return model
+        except Exception as e:
+            print("=== ERRO EM ADD_CHAT_MESSAGE ===")
+            print(f"Erro: {e}")
+            print(f"Tipo: {type(e)}")
+            import traceback
+
+            traceback.print_exc()
+            print("=== FIM DO ERRO ===")
+            raise
 
     @staticmethod
     def get_chat_messages(chat_id: str) -> list[ChatMessage]:
@@ -169,7 +190,7 @@ class ChatRepository:
             list[ChatMessage]: List of chat messages in the session.
 
         """
-        return list(ChatMessage.objects.filter(chat_id=chat_id).order_by("created_at"))
+        return list(ChatMessage.objects.filter(chat__id=chat_id).order_by("created_at"))
 
     @staticmethod
     def update_chat_message(model: ChatMessage) -> ChatMessage:
@@ -254,7 +275,13 @@ class ChatRepository:
             ChatMessageResponse: The mapped chat message response schema.
 
         """
-        return ChatMessageResponse.model_validate(model, from_attributes=True)
+        return ChatMessageResponse(
+            id=str(model.id),
+            chat_id=str(model.chat.id),
+            role=ChatRole(model.role),
+            content=model.content,
+            created_at=model.created_at,
+        )
 
     @staticmethod
     def map_chat_to_response(model: Chat) -> ChatResponse:
@@ -273,8 +300,8 @@ class ChatRepository:
         ]
 
         return ChatResponse(
-            id=model.id,
-            user_id=model.user_id,
+            id=str(model.id),
+            user_id=str(model.user.id),
             created_at=model.created_at,
             updated_at=model.updated_at,
             messages=messages_response,

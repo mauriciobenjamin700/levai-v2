@@ -1,3 +1,4 @@
+<!-- apps/chat/templates/chat.html -->
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -15,19 +16,47 @@
         {% include "partials/header.html" %}
         {% include "partials/sidebar.html" %}
         <div id="content" class="content">
-            <h2>Estou as Ordens</h2>
+            <h2>Estou às Ordens</h2>
             <div id="chat-history">
                 {% for chat in chats %}
                     <div class="chat-item">
-                        <h3>{{ chat.id }}</h3>
-                        {% for message in messages %}
-                        <p><strong>{{ message.role }}:</strong> {{ message.content }}</p>
-                        {% endfor %}
+                        <!-- ✅ CORRETO -->
+                        <a href="{% url 'chat_detail' chat.id %}" class="chat-link">
+                            <div class="chat-header">
+                                <h3>{{ chat.title }}</h3>
+                                <span class="chat-date">{{ chat.created_at|date:"d/m H:i" }}</span>
+                            </div>
+                            
+                            <!-- Mostrar preview das mensagens -->
+                            {% if chat.messages %}
+                                <div class="chat-preview">
+                                    {% for message in chat.messages|slice:":2" %}
+                                        <p class="message-preview">
+                                            <strong>{{ message.role }}:</strong> 
+                                            {{ message.content|truncatechars:80 }}
+                                        </p>
+                                    {% endfor %}
+                                    
+                                    {% if chat.messages|length > 2 %}
+                                        <p class="more-messages">
+                                            +{{ chat.messages|length|add:"-2" }} mensagens...
+                                        </p>
+                                    {% endif %}
+                                </div>
+                            {% else %}
+                                <p class="no-messages">Chat vazio</p>
+                            {% endif %}
+                        </a>
                     </div>
                 {% empty %}
-                    <p>Nenhum chat encontrado.</p>
+                    <div class="empty-state">
+                        <p>Nenhum chat encontrado.</p>
+                        <p>Envie uma mensagem abaixo para começar!</p>
+                    </div>
                 {% endfor %} 
             </div>
+            
+            <!-- Input para novo chat -->
             {% include "partials/chat_input.html" %}
         </div>
     </div>
