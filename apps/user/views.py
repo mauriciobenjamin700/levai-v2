@@ -5,7 +5,7 @@ from django.shortcuts import redirect, render
 
 from core.messages import handle_error_message
 from core.schemas import UserLogin, UserRequest
-from core.services import UserService
+from core.services.user import UserService
 
 
 def register_view(request: HttpRequest) -> HttpResponse:

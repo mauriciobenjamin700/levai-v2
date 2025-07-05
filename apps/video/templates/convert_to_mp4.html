@@ -175,13 +175,7 @@
             // Esconder preview para economizar espaço
             videoPreview.style.display = 'none';
         });
-        
-        // Reset em caso de erro
-        {% if messages %}
-            loadingIndicator.style.display = 'none';
-            convertBtn.disabled = false;
-            convertBtn.innerHTML = '🎬 Converter para MP4';
-        {% endif %}
+    
     });
     </script>
 
