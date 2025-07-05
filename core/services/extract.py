@@ -26,6 +26,14 @@ class ExtractService:
     - PDF,
     - images,
     - and audio files.
+
+    Methods:
+        extract_text_from_pdf: Extract text from a PDF file.
+        extract_text_from_pdf_ocr: Extract text from a PDF file using OCR.
+        extract_text_from_image: Extract text from an image file using OCR.
+        transcribe_audio: Method for audio transcription that tries different approaches
+        clean_and_format_text: Clean and format raw text.
+
     """
 
     @staticmethod
@@ -111,13 +119,13 @@ class ExtractService:
 
     @staticmethod
     def transcribe_audio(audio_path: str) -> str:
-        """Método robusto para transcrição que tenta diferentes abordagens.
+        """Transcribe audio using Google Speech Recognition.
 
         Args:
-            audio_path (str): Caminho do arquivo de áudio
+            audio_path (str): Path to the audio file.
 
         Returns:
-            str: Texto transcrito
+            str: Transcribed text from the audio file.
 
         """
         try:
