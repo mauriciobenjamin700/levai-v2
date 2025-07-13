@@ -133,7 +133,6 @@ def chat_view(request: HttpRequest, chat_id: str = None) -> HttpResponse:
                 messages.error(request, f"Erro: {str(e)}")
                 return redirect("chat_view")
         else:
-            # ✅ Mostrar lista de chats
             print("GET DE CHAT SEM ID")
             chats = ChatRepository.get_all_chats(user_id=request.user.id)
             response = []

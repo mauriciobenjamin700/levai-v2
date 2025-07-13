@@ -8,16 +8,8 @@ The LevAI project is about creating an AI to help you with software development,
 docker compose up -d --build
 ```
 
-API
-
 ```bash
-http://localhost:8087/api/
-```
-
-Models
-
-```bash
-http://localhost:8087/models/
+http://localhost:8087
 ```
 
 ## License
@@ -54,7 +46,21 @@ sudo systemctl restart docker
 ### Ollama
 
 ```bash
-docker run -d --gpus=all -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
+curl -fsSL https://ollama.com/install.sh | sh
+ollama pull  deepseek-r1:8b
+ollama pull gemma3:27b
+```
+
+### Tesseract
+
+```bash
+sudo apt update
+sudo apt install tesseract-ocr
+sudo apt install tesseract-ocr-por
+tesseract --version
+sudo apt install libtesseract-dev libleptonica-dev pkg-config
+sudo apt install libpng-dev libjpeg-dev libtiff-dev
+which tesseract
 ```
 
 ## References

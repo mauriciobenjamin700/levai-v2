@@ -1,4 +1,3 @@
-<!-- apps/chat/templates/chat.html -->
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -20,14 +19,11 @@
             <div id="chat-history">
                 {% for chat in chats %}
                     <div class="chat-item">
-                        <!-- ✅ CORRETO -->
                         <a href="{% url 'chat_detail' chat.id %}" class="chat-link">
                             <div class="chat-header">
                                 <h3>{{ chat.title }}</h3>
                                 <span class="chat-date">{{ chat.created_at|date:"d/m H:i" }}</span>
                             </div>
-                            
-                            <!-- Mostrar preview das mensagens -->
                             {% if chat.messages %}
                                 <div class="chat-preview">
                                     {% for message in chat.messages|slice:":2" %}

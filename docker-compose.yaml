@@ -29,23 +29,6 @@ services:
     restart: always
     env_file:
       - .env
-  levai-models:
-    image: ollama/ollama
-    container_name: levai-models
-    command: "ollama pull DeepSeek-R1"
-    networks:
-      - levai_network
-    ports:
-      - "11434:11434"
-    restart: always
-    volumes:
-      - levai-models:/root/.ollama
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - capabilities: [gpu]
-
 
   levai-app:
     container_name: levai-app
