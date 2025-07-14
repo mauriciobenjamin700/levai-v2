@@ -13,7 +13,7 @@ from core.utils.upload import save_uploaded_file
 
 
 @login_required
-def chat_view(request: HttpRequest, chat_id: str = None) -> HttpResponse:
+def chat_view(request: HttpRequest, chat_id: str = "") -> HttpResponse:
     """Render the chat view for authenticated users.
 
     Args:
@@ -24,6 +24,13 @@ def chat_view(request: HttpRequest, chat_id: str = None) -> HttpResponse:
         HttpResponse: Rendered chat view.
 
     """
+    # 🔍 Adicione este debug no início da função
+    print("=" * 50)
+    print(f"🔍 REQUEST METHOD: {request.method}")
+    print(f"🔍 CHAT_ID RECEBIDO: {chat_id}")
+    print(f"🔍 TIPO DO CHAT_ID: {type(chat_id)}")
+    print(f"🔍 URL COMPLETA: {request.get_full_path()}")
+    print("=" * 50)
     if request.method == "POST":
         message = request.POST.get("message")
         document = request.FILES.get("document")
@@ -38,15 +45,9 @@ def chat_view(request: HttpRequest, chat_id: str = None) -> HttpResponse:
 
             print("CHAT ID DA LINHA 38", chat_id)
 
-        # Validação
-        if not message:
-            messages.error(request, "A mensagem é obrigatória!")
-            if chat_id:
-                return redirect("chat_detail", chat_id=chat_id)
-            return redirect("chat_view")
-
         try:
-
+            if not message:
+                message = "" 
             if not chat_id:
                 chat = ChatRepository.create_chat(user=request.user, title=message[:50])
                 chat = ChatRepository.add_chat(chat)
@@ -55,14 +56,10 @@ def chat_view(request: HttpRequest, chat_id: str = None) -> HttpResponse:
                 # Buscar chat existente
                 chat = ChatRepository.get_chat(chat_id=chat_id)
                 print("CHAT DA LINHA 59", chat)
-                if not chat:
-                    messages.error(request, "Chat não encontrado!")
-                    return redirect("chat_view")
 
                 # ✅ Verificar se pertence ao usuário
                 if chat.user.id != request.user.id:
-                    messages.error(request, "Acesso negado!")
-                    return redirect("chat_view")
+                    print("CHAT NÃO PERTENCE AO USUÁRIO")
 
             metadata = {
                 "document": None,
@@ -105,14 +102,12 @@ def chat_view(request: HttpRequest, chat_id: str = None) -> HttpResponse:
 
             chat_message = ChatRepository.add_chat_message(chat_message)
 
-            messages.success(request, "Mensagem enviada com sucesso!")
-
             response: ChatResponse = ChatRepository.map_chat_to_response(chat)
 
-            return redirect("chat_detail", chat_id=chat.id)
+            return redirect("chat_detail", chat_id=str(chat.id))
 
         except Exception as e:
-            messages.error(request, f"Erro ao processar: {str(e)}")
+            print(f"Erro ao processar a mensagem: {str(e)}")
             if chat_id:
                 return redirect("chat_detail", chat_id=chat_id)
             return redirect("chat_view")
@@ -122,15 +117,15 @@ def chat_view(request: HttpRequest, chat_id: str = None) -> HttpResponse:
             print("GET DE CHAT COM ID: ", chat_id)
             try:
                 chat = ChatRepository.get_chat(chat_id=chat_id)
-                if not chat or chat.user.id != request.user.id:
-                    messages.error(request, "Chat não encontrado!")
+                if not chat or str(chat.user.id) != str(request.user.id):
+                    print("CHAT NÃO ENCONTRADO OU NÃO PERTENCE AO USUÁRIO")
                     return redirect("chat_view")
 
                 response = ChatRepository.map_chat_to_response(chat)
                 return render(request, "chat_details.html", {"chat": response})
 
             except Exception as e:
-                messages.error(request, f"Erro: {str(e)}")
+                print(f"Erro ao buscar o chat: {str(e)}")
                 return redirect("chat_view")
         else:
             print("GET DE CHAT SEM ID")
@@ -140,3 +135,8 @@ def chat_view(request: HttpRequest, chat_id: str = None) -> HttpResponse:
                 response.append(ChatRepository.map_chat_to_response(chat))
 
             return render(request, "chat.html", {"chats": response})
+
+
+def test_chat_detail(request, chat_id):
+    """View de teste para diagnóstico."""
+    return HttpResponse(f"Chat ID: {chat_id}, Tipo: {type(chat_id)}")

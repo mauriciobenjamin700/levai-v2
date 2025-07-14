@@ -39,11 +39,19 @@
 }
 
 /* static/css/chat.css */
+#chat-history {
+    position: relative;
+    z-index: 1;
+    pointer-events: auto;
+}
+
 .chat-item {
     border: 1px solid #ddd;
     border-radius: 8px;
     margin-bottom: 10px;
     transition: all 0.3s ease;
+    position: relative;
+    background-color: white;
 }
 
 .chat-item:hover {
@@ -56,6 +64,8 @@
     padding: 15px;
     text-decoration: none;
     color: inherit;
+    cursor: pointer;
+    pointer-events: auto;
 }
 
 .chat-link:hover {
