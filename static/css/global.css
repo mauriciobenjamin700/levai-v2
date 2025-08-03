@@ -272,7 +272,8 @@ body {
     top: 0;
     left: 0;
     border: 1px solid var(--border-light);
-    
+    box-shadow: var(--shadow-sm);
+    z-index: var(--z-fixed);
 }
 
 .headerProfile{
@@ -337,6 +338,7 @@ body {
     height: 100%;
     background-color: #222;
     align-items: center;
+    justify-content: center;
 
 }
 
@@ -390,3 +392,4 @@ body {
     border-radius: 8px;
     border-left: 4px solid #007bff;
 }
+

@@ -30,8 +30,8 @@ class ChatController:
                     print("CHAT NÃO ENCONTRADO OU NÃO PERTENCE AO USUÁRIO")
                     return redirect("chat_view")
 
-                response = ChatRepository.map_chat_to_response(chat)
-                return render(request, "chat_details.html", {"chat": response})
+                chat: ChatResponse = ChatRepository.map_chat_to_response(chat)
+                return render(request, "chat_details.html", {"chat": chat})
 
             except Exception as e:
                 print(f"Erro ao buscar o chat: {str(e)}")

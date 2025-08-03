@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{% static 'css/home.css' %}?v=123">
     <!--?v=123 força remoção de cash, resolvendo bugs-->
     <link rel="stylesheet" href="{% static 'css/chat.css' %}?v=123"></head> 
+    <script src="{% static 'js/openChat.js' %}?v=123"></script>
 <body>
     <div id="container" class="container">
         {% include "partials/header.html" %}
@@ -18,14 +19,16 @@
             {% include "partials/chat_input.html" %}
             <div class="chat-history-container">
                 {% for chat in chats %}
-                    <div class="chat">
+                    <div 
+                        class="chat" 
+                        id="chat-{{ chat.id }}"
+                        onclick="openChat('{{ chat.id }}')">
                         <div class="chat-header">
                             <span class="chat-id">{{ chat.id  }}</span>
                             <span class="chat-timestamp">{{ chat.created_at }}</span>
                         </div>
                         <div class="chat-content">
                             <p>Hello World</p>
-
                         </div>
                     </div>
                 {% endfor %}
@@ -34,4 +37,5 @@
         </div>
     </div>
 </body>
+    <script src="{% static 'js/openChat.js' %}?v=123"></script>
 </html>

@@ -1,4 +1,3 @@
-<!-- apps/chat/templates/chat_details.html -->
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -15,33 +14,27 @@
     <div id="container" class="container">
         {% include "partials/header.html" %}
         {% include "partials/sidebar.html" %} 
-        <div id="content" class="content">
-            <div class="chat-header">
-                <h2>{{ chat.title }}</h2>
-                <div class="chat-info">
-                    <span>Criado em: {{ chat.created_at|date:"d/m/Y H:i" }}</span>
-                    <a href="{% url 'chat_list' %}" class="btn-back">← Voltar aos chats</a>
-                </div>
-            </div>
-            <div class="chat-messages">
+        <div class="content">
+            {% include "partials/chat_input.html" %}
+            <h1>{{ chat.id }}</h1>
+            <div class="chat-history-container">
                 {% for message in chat.messages %}
-                    <div class="chat-item {{ message.role|lower }}">
+                    <div class="message-card">
                         <div class="message-header">
-                            <strong class="message-role">{{ message.role|title }}:</strong>
-                            <span class="message-time">{{ message.created_at|date:"H:i" }}</span>
+                            {% if message.role == 'assistant' %}
+                                <img src="{% static 'images/robot.png' %}" alt="Assistente IA" class="avatar">
+                            {% elif message.role == 'user' %}
+                                <img src="{% static 'images/humam.png' %}" alt="Usuário" class="avatar">
+                            {% else %}
+                                <img src="{% static 'images/default.png' %}" alt="Avatar" class="avatar">
+                            {% endif %}
+                            <span class="message-role">{{ message.role }}</span>
                         </div>
-                        <div class="message-content">
-                            {{ message.content|linebreaks }}
-                        </div>
-                    </div>
-                {% empty %}
-                    <div class="empty-messages">
-                        <p>Nenhuma mensagem ainda.</p>
-                        <p>Envie uma mensagem abaixo para começar a conversa!</p>
+                        <p class="message-content">{{ message.content }}</p>
                     </div>
                 {% endfor %}
             </div>
-            {% include "partials/chat_input.html" with chat=chat %}
+
         </div>
     </div>
 </body>

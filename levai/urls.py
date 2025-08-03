@@ -30,5 +30,13 @@ urlpatterns = [
     path("video/", include("apps.video.urls")),
 ]
 
+# Para desenvolvimento
 if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# Configurar handlers de erro (opcional se usar views customizadas)
+handler404 = 'levai.views.custom_404_view'
+handler500 = 'levai.views.custom_500_view'
+handler403 = 'levai.views.custom_403_view'
+handler400 = 'levai.views.custom_400_view'
