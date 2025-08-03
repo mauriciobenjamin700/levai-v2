@@ -1,6 +1,11 @@
 """Schemas package."""
 
-from .chat import ChatMessageRequest, ChatMessageResponse, ChatRequest, ChatResponse
+from .chat import (
+    ChatMessageRequest,
+    ChatMessageResponse,
+    ChatRequest,
+    ChatResponse,
+)
 from .user import UserLogin, UserRequest, UserResponse
 
 __all__ = [

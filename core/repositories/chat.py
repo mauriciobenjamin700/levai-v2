@@ -252,7 +252,9 @@ class ChatRepository:
         return Chat(**request.to_dict())
 
     @staticmethod
-    def map_chat_message_request_to_model(request: ChatMessageRequest) -> ChatMessage:
+    def map_chat_message_request_to_model(
+        request: ChatMessageRequest,
+    ) -> ChatMessage:
         """Map a ChatMessageRequest schema to a ChatMessage model instance.
 
         Args:

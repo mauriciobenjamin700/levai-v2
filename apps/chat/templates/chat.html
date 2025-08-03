@@ -5,53 +5,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LevAI</title>
-    <link rel="stylesheet" href="{% static 'css/global.css' %}">
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-    <link rel="stylesheet" href="{% static 'css/chat.css' %}">
-    <script src="{% static 'js/scripts.js' %}"></script>
-</head>
+    <link rel="stylesheet" href="{% static 'css/global.css' %}?v=123">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}?v=123">
+    <!--?v=123 força remoção de cash, resolvendo bugs-->
+    <link rel="stylesheet" href="{% static 'css/chat.css' %}?v=123"></head> 
 <body>
     <div id="container" class="container">
         {% include "partials/header.html" %}
         {% include "partials/sidebar.html" %}
-        <div id="content" class="content">
+        <div id="chat-page" class="content">
             <h2>Estou às Ordens</h2>
-            <div id="chat-history">
-                {% for chat in chats %}
-                    <div class="chat-item">
-                        <a href="{% url 'chat_detail' chat.id %}" class="chat-link">
-                            <div class="chat-header">
-                                <h3>{{ chat.title }}</h3>
-                                <span class="chat-date">{{ chat.created_at|date:"d/m H:i" }}</span>
-                            </div>
-                            {% if chat.messages %}
-                                <div class="chat-preview">
-                                    {% for message in chat.messages|slice:":2" %}
-                                        <p class="message-preview">
-                                            <strong>{{ message.role }}:</strong> 
-                                            {{ message.content|truncatechars:80 }}
-                                        </p>
-                                    {% endfor %}
-                                    
-                                    {% if chat.messages|length > 2 %}
-                                        <p class="more-messages">
-                                            +{{ chat.messages|length|add:"-2" }} mensagens...
-                                        </p>
-                                    {% endif %}
-                                </div>
-                            {% else %}
-                                <p class="no-messages">Chat vazio</p>
-                            {% endif %}
-                        </a>
-                    </div>
-                {% empty %}
-                    <div class="empty-state">
-                        <p>Nenhum chat encontrado.</p>
-                        <p>Envie uma mensagem abaixo para começar!</p>
-                    </div>
-                {% endfor %} 
-            </div>
             {% include "partials/chat_input.html" %}
+            <div class="chat-history-container">
+                {% for chat in chats %}
+                    <div class="chat">
+                        <div class="chat-header">
+                            <span class="chat-id">{{ chat.id  }}</span>
+                            <span class="chat-timestamp">{{ chat.created_at }}</span>
+                        </div>
+                        <div class="chat-content">
+                            <p>Hello World</p>
+
+                        </div>
+                    </div>
+                {% endfor %}
+
+            </div>
         </div>
     </div>
 </body>

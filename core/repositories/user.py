@@ -135,7 +135,9 @@ class UserRepository:
 
         """
         model = User(
-            username=request.name, email=request.email, password=request.password
+            username=request.name,
+            email=request.email,
+            password=request.password,
         )
 
         model.set_password(request.password)  # Hash the password

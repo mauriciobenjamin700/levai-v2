@@ -54,7 +54,9 @@ def download_view(request: HttpRequest) -> HttpResponse | FileResponse:
 
             print("file_path: ", file_path)
             return FileResponse(
-                open(file_path, "rb"), as_attachment=True, filename=file_name + ".mp4"
+                open(file_path, "rb"),
+                as_attachment=True,
+                filename=file_name + ".mp4",
             )
 
         else:
@@ -113,7 +115,15 @@ def convert_to_mp4_view(request: HttpRequest) -> HttpResponse:
             return redirect("convert_to_mp4")
 
         # Verificar formato suportado
-        allowed_extensions = [".mov", ".avi", ".mkv", ".wmv", ".flv", ".webm", ".m4v"]
+        allowed_extensions = [
+            ".mov",
+            ".avi",
+            ".mkv",
+            ".wmv",
+            ".flv",
+            ".webm",
+            ".m4v",
+        ]
         file_extension = Path(video_file.name).suffix.lower()
 
         if file_extension not in allowed_extensions:
@@ -141,7 +151,9 @@ def convert_to_mp4_view(request: HttpRequest) -> HttpResponse:
 
                 # Retornar arquivo MP4 para download
                 response = FileResponse(
-                    open(mp4_path, "rb"), as_attachment=True, filename=download_filename
+                    open(mp4_path, "rb"),
+                    as_attachment=True,
+                    filename=download_filename,
                 )
 
                 # Opcional: Limpar arquivos temporários após um tempo

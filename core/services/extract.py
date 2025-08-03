@@ -8,6 +8,7 @@
 import os
 import re
 import tempfile
+from typing import Any
 
 import pytesseract
 import speech_recognition as sr
@@ -239,7 +240,7 @@ class ExtractService:
         return text.strip()
 
     @staticmethod
-    def __extract_structured_content(text: str) -> dict:
+    def __extract_structured_content(text: str) -> dict[str, Any]:
         """Extract structured content from formatted text.
 
         Example:
@@ -378,7 +379,7 @@ class ExtractService:
         return final_text
 
     @staticmethod
-    def __validate_audio_file(audio_path: str) -> dict:
+    def __validate_audio_file(audio_path: str) -> dict[str, Any]:
         """Validate and get information about the audio file.
 
         Args:

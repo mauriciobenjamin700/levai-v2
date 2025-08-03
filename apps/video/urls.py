@@ -2,7 +2,11 @@
 
 from django.urls import path
 
-from apps.video.views import convert_to_mp4_view, convert_video_to_audio, download_view
+from apps.video.views import (
+    convert_to_mp4_view,
+    convert_video_to_audio,
+    download_view,
+)
 
 urlpatterns = [
     path("", download_view, name="download_view"),

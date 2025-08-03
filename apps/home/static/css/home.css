@@ -24,17 +24,18 @@
     justify-content: center;
     width: 600px;
     padding: 24px 0;
-    border: 1px solid #ccc;
+    border: var(--border-light) 1px solid;
     border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    background: #181818;
+    box-shadow: var(--shadow-md);
+    color: var(--text-primary);
+    background: var(--background-secondary);
     gap: 20px;
 }
 
 .searchContainer input {
     width: 100%;
     padding: 10px;
-    border: 1px solid #333;
+    border: 1px solid var(--border-color);
     border-radius: 5px;
     font-size: 16px;
     margin-bottom: 0; /* Corrigido */
@@ -43,7 +44,7 @@
 .searchContainer textarea {
     width: 100%;
     padding: 10px;
-    border: 1px solid #333;
+    border: var(--border-color) 1px solid ;
     border-radius: 5px;
     font-size: 16px;
     margin-bottom: 0; /* Corrigido */
@@ -66,6 +67,6 @@
     padding: 8px 0;
 }
 .buttonContainer button:hover{
-    background-color: #0056b3;
+    background-color: var(--background-secondary);
 }
 

@@ -109,7 +109,10 @@ def complex_pdf():
 
         # Seções
         sections = [
-            ("1. INTRODUÇÃO", "Este documento foi gerado automaticamente para testes."),
+            (
+                "1. INTRODUÇÃO",
+                "Este documento foi gerado automaticamente para testes.",
+            ),
             (
                 "2. METODOLOGIA",
                 "Utilizamos pypdf e reportlab para criar PDFs de teste.",
@@ -118,7 +121,10 @@ def complex_pdf():
                 "3. RESULTADOS",
                 "Os testes devem conseguir extrair este texto corretamente.",
             ),
-            ("4. CONCLUSÃO", "PDF gerado com sucesso para validação automática."),
+            (
+                "4. CONCLUSÃO",
+                "PDF gerado com sucesso para validação automática.",
+            ),
         ]
 
         for section_title, section_content in sections:
@@ -409,7 +415,10 @@ def noisy_audio():
 
             # Converter para AudioSegment
             noise = AudioSegment(
-                noise_data.tobytes(), frame_rate=sample_rate, sample_width=2, channels=1
+                noise_data.tobytes(),
+                frame_rate=sample_rate,
+                sample_width=2,
+                channels=1,
             )
 
         # Mixar fala com ruído (fala mais alta que ruído)

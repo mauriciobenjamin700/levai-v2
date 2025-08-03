@@ -67,7 +67,8 @@ def batch_video_to_mp3(video_folder: str, output_folder: str = None) -> list:
             video_path = os.path.join(video_folder, file)
             try:
                 mp3_path = video_to_mp3_moviepy(
-                    video_path, os.path.join(output_folder, f"{Path(file).stem}.mp3")
+                    video_path,
+                    os.path.join(output_folder, f"{Path(file).stem}.mp3"),
                 )
                 converted_files.append(mp3_path)
             except Exception as e:

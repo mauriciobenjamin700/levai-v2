@@ -2,14 +2,15 @@ from ollama import ChatResponse, chat
 
 
 class AIService:
-    """
-    AI services for handling text and image models using Ollama.
+    """AI services for handling text and image models using Ollama.
 
     Methods:
         ask(question: str) -> str: Ask a question to the AI model and get a response.
-    
+
     """
+
     def __init__(self):
+        """Initialize the AIService with default model configurations."""
         self.__text_model = "deepseek-r1:8b"
         self.__image_model = "gemma3:27b"
         self.__ollama_keep_alive_single_query = 0
@@ -20,52 +21,47 @@ class AIService:
         self.__history = []
 
     def ask(self, question: str) -> str:
-        """
-        Ask a question to the AI model and get a response.
+        """Ask a question to the AI model and get a response.
 
         Args:
             question (str): The question to ask the AI model.
 
         Returns:
             str: The response from the AI model.
+
         """
         response: ChatResponse = chat(
             model=self.__text_model,
             messages=[{"role": "user", "content": question}],
             stream=False,
             think=True,
-            keep_alive=self.__ollama_keep_alive_single_query
+            keep_alive=self.__ollama_keep_alive_single_query,
         )
 
-        return response.message.content
-    
+        return str(response.message.content)
+
     def chat(self, question: str) -> str:
-        """
-        Chat with the AI model and get a response.
+        """Chat with the AI model and get a response.
 
         Args:
             question (str): The question to ask the AI model.
 
         Returns:
             str: The response from the AI model.
-        """
 
-        self.__history.append({
-                "role": "user", 
-                "content": question
-            })
+        """
+        self.__history.append({"role": "user", "content": question})
 
         response: ChatResponse = chat(
             model=self.__text_model,
             messages=self.__history,
             stream=False,
             think=True,
-            keep_alive=self.__ollama_keep_alive_complex_query
+            keep_alive=self.__ollama_keep_alive_complex_query,
         )
 
-        self.__history.append({
-            "role": "assistant", 
-            "content": response.message.content
-        })
+        self.__history.append(
+            {"role": "assistant", "content": response.message.content}
+        )
 
-        return response.message.content
+        return str(response.message.content)
