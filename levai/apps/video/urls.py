@@ -1,0 +1,15 @@
+"""Videos URLS."""
+
+from django.urls import path
+
+from levai.apps.video.views import (
+    convert_to_mp4_view,
+    convert_video_to_audio,
+    download_view,
+)
+
+urlpatterns = [
+    path("", download_view, name="download_view"),
+    path("convert/", convert_video_to_audio, name="video_to_audio"),
+    path("convert-to-mp4", convert_to_mp4_view, name="convert_to_mp4_view"),
+]

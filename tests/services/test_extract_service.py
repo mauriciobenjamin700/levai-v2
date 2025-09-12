@@ -1,4 +1,4 @@
-from core.services.extract import ExtractService
+from levai.core.services.extract import ExtractService
 
 
 def test_extract_simple_pdf(simple_pdf: str):

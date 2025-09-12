@@ -32,7 +32,6 @@ ALLOWED_HOSTS = []
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -42,11 +41,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "apps.user",
-    "apps.chat",
-    "apps.home",
-    "apps.document",
-    "apps.video",
+    "levai.apps.user",
+    "levai.apps.chat",
+    "levai.apps.home",
+    "levai.apps.document",
+    "levai.apps.video",
 ]
 
 MIDDLEWARE = [
@@ -64,7 +63,7 @@ ROOT_URLCONF = "levai.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],
+        "DIRS": [BASE_DIR / "levai/templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -128,7 +127,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "levai/static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -140,10 +139,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "user.User"
 LOGIN_URL = "/auth/login/"
 STATICFILES_DIRS = [
-    BASE_DIR / "static",  # para arquivos globais
+    BASE_DIR / "levai/static",  # para arquivos globais
 ]
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = "levai/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "levai/media")
 
 os.makedirs(MEDIA_ROOT, exist_ok=True)

@@ -23,11 +23,11 @@ from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include("apps.home.urls")),
-    path("auth/", include("apps.user.urls")),
-    path("chat/", include("apps.chat.urls")),
-    path("document/", include("apps.document.urls")),
-    path("video/", include("apps.video.urls")),
+    path("", include("levai.apps.home.urls")),
+    path("auth/", include("levai.apps.user.urls")),
+    path("chat/", include("levai.apps.chat.urls")),
+    path("document/", include("levai.apps.document.urls")),
+    path("video/", include("levai.apps.video.urls")),
 ]
 
 # Para desenvolvimento
@@ -36,7 +36,7 @@ if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # Configurar handlers de erro (opcional se usar views customizadas)
-handler404 = 'levai.views.custom_404_view'
-handler500 = 'levai.views.custom_500_view'
-handler403 = 'levai.views.custom_403_view'
-handler400 = 'levai.views.custom_400_view'
+handler404 = "levai.views.custom_404_view"
+handler500 = "levai.views.custom_500_view"
+handler403 = "levai.views.custom_403_view"
+handler400 = "levai.views.custom_400_view"
