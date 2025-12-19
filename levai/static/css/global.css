@@ -274,6 +274,7 @@ body {
     border: 1px solid var(--border-light);
     box-shadow: var(--shadow-sm);
     z-index: var(--z-fixed);
+    margin-left: 200px;
 }
 
 .headerProfile{
