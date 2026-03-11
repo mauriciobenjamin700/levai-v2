@@ -1,12 +1,21 @@
-/* Estilos especificos para paginas de documento */
-/* Classes base (.formContainer, .form-group, .btn, etc) vem de video.css */
+/* Document converter page styles */
+/* Uses shared .formContainer, .form-group, .btn, .button-group,
+   .info-section, .features from global.css */
+
+.formContainer {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+}
 
 .doc-file-info {
     display: flex;
     align-items: center;
     gap: var(--spacing-md);
     padding: var(--spacing-sm) var(--spacing-md);
-    background: var(--background-tertiary);
+    background: var(--surface-alt);
     border-radius: var(--radius-md);
     margin-bottom: var(--spacing-md);
     font-size: var(--font-sm);
@@ -14,8 +23,8 @@
 }
 
 .doc-file-info #fileName {
-    font-weight: bold;
-    color: var(--text-primary);
+    font-weight: 600;
+    color: var(--text);
 }
 
 .doc-file-info #fileSize {
@@ -25,13 +34,13 @@
 .doc-alt-link {
     margin-top: var(--spacing-lg);
     padding-top: var(--spacing-md);
-    border-top: 1px solid var(--border-medium);
+    border-top: 1px solid var(--border);
     color: var(--text-secondary);
 }
 
 .doc-alt-link a {
-    color: var(--highlight-primary);
-    font-weight: bold;
+    color: var(--accent);
+    font-weight: 600;
 }
 
 .doc-alt-link a:hover {
@@ -40,6 +49,10 @@
 
 /* Mobile */
 @media (max-width: 767px) {
+    .formContainer {
+        padding: var(--spacing-md);
+    }
+
     .doc-file-info {
         flex-direction: column;
         align-items: flex-start;

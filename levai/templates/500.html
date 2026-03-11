@@ -1,26 +1,17 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Erro Interno - LevAI</title>
-    <link rel="stylesheet" href="{% static 'css/global.css' %}">
-    <link rel="stylesheet" href="{% static 'css/error.css' %}">
-</head>
-<body>
-    <div class="error-container">
-        <div class="error-content">
-            <h1 class="error-code">500</h1>
-            <h2 class="error-title">Erro interno do servidor</h2>
-            <p class="error-message">
-                Algo deu errado em nossos servidores. Tente novamente em alguns minutos.
-            </p>
-            <div class="error-actions">
-                <a href="{% url 'home' %}" class="btn-primary">Voltar ao Início</a>
-                <button onclick="window.location.reload()" class="btn-secondary">Tentar Novamente</button>
-            </div>
-        </div>
+{% extends "base.html" %}
+
+{% block title %}Erro Interno - LevAI{% endblock %}
+
+{% block body %}
+<div class="error-container">
+    <div class="error-code">500</div>
+    <h2 class="error-title">Erro interno do servidor</h2>
+    <p class="error-message">
+        Algo deu errado em nossos servidores. Tente novamente em alguns minutos.
+    </p>
+    <div class="error-actions">
+        <a href="/" class="btn btn-primary">Voltar ao Inicio</a>
+        <button onclick="window.location.reload()" class="btn btn-secondary">Tentar Novamente</button>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

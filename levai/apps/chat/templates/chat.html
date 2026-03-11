@@ -2,13 +2,12 @@
 {% load static %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/home.css' %}?v=124">
-<link rel="stylesheet" href="{% static 'css/chat.css' %}?v=124">
+<link rel="stylesheet" href="{% static 'css/chat.css' %}?v=201">
 {% endblock %}
 
 {% block content %}
 <div id="chat-page">
-    <h2>Estou as Ordens</h2>
+    <h2>Como posso ajudar?</h2>
     {% include "partials/chat_input.html" %}
     <div class="chat-history-container">
         {% for chat in chats %}
@@ -30,5 +29,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'js/openChat.js' %}?v=124"></script>
+<script src="{% static 'js/openChat.js' %}?v=201"></script>
 {% endblock %}

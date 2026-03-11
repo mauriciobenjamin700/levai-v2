@@ -1,153 +1,18 @@
+/* Video page styles */
+/* Uses shared .formContainer, .form-group, .btn, .button-group,
+   .info-section, .features, .format-grid, .format-badge from global.css */
+
 .formContainer {
     width: 100%;
     max-width: 700px;
     margin: 0 auto;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: var(--shadow-sm);
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: var(--text-primary);
-    font-size: 1.1em;
-}
-
-.form-group input[type="file"] {
-    width: 100%;
-    padding: 12px;
-    border: 2px dashed var(--primary-color);
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.form-group input[type="file"]:hover {
-    border-color: var(--primary-color-hover);
-}
-
-.help-text {
-    display: block;
-    margin-top: 5px;
-    color: var(--text-muted);
-    font-size: 0.9em;
-}
-
-.button-group {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    margin: 25px 0;
-    flex-wrap: wrap;
-}
-
-.btn {
-    padding: 12px 24px;
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: var(--transition-fast);
-    font-size: 1em;
-    min-height: 44px;
-}
-
-.btn-primary {
-    background-color: var(--primary-color);
-    color: white;
-}
-
-.btn-primary:hover:not(:disabled) {
-    background: var(--primary-color-hover);
-    transform: translateY(-2px);
-}
-
-.btn-secondary {
-    background: var(--secondary-color);
-    color: white;
-}
-
-.btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-.info-section {
-    margin-top: 30px;
-    padding: 25px;
-    border-radius: 10px;
-    border-left: 4px solid var(--primary-color);
-}
-
-.features ul {
-    list-style: none;
-    padding: 0;
-}
-
-.features li {
-    margin: 8px 0;
-    padding-left: 5px;
-}
-
-.format-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.format-badge {
-    background: var(--primary-color);
-    color: var(--text-primary);
-    padding: 5px 12px;
-    border-radius: 15px;
-    font-size: 0.9em;
-    font-weight: bold;
-}
-
-#videoPreview {
-    text-align: center;
-    padding: 20px;
-    border-radius: 10px;
-    border: 1px solid var(--border-light);
-}
-
-#videoInfo {
-    text-align: left;
-    padding: 15px;
-    border-radius: 8px;
-    margin-top: 15px;
-}
-
-.alert {
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 6px;
-    border-left: 4px solid;
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
 }
 
 /* Mobile */
 @media (max-width: 767px) {
     .formContainer {
-        padding: var(--spacing-md);
-    }
-
-    .button-group {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .btn {
-        width: 100%;
-    }
-
-    .info-section {
         padding: var(--spacing-md);
     }
 }

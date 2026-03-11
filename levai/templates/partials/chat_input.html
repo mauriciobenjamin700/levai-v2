@@ -19,59 +19,58 @@
         <input type="file" id="video" name="video" accept="video/*" style="display: none;">
 
         <div class="buttonContainer">
-            <button type="button" id="search-button" class="btn btn-primary" title="Upload de documento" aria-label="Upload de documento">
-                📄
+            <button type="button" id="search-button" title="Upload de documento" aria-label="Upload de documento">
+                <i data-lucide="file-text"></i>
             </button>
 
-            <button type="button" id="image-button" class="btn btn-info" title="Upload de imagem" aria-label="Upload de imagem">
-                🖼️
+            <button type="button" id="image-button" title="Upload de imagem" aria-label="Upload de imagem">
+                <i data-lucide="image"></i>
             </button>
 
-            <button type="button" id="video-button" class="btn btn-purple" title="Upload de video" aria-label="Upload de video">
-                🎬
+            <button type="button" id="video-button" title="Upload de video" aria-label="Upload de video">
+                <i data-lucide="video"></i>
             </button>
 
-            <button type="button" id="upload-audio-button" class="btn btn-secondary" title="Upload de audio" aria-label="Upload de audio">
-                🎵
+            <button type="button" id="upload-audio-button" title="Upload de audio" aria-label="Upload de audio">
+                <i data-lucide="music"></i>
             </button>
 
-            <button type="button" id="record-button" class="btn btn-warning" title="Gravar audio" aria-label="Gravar audio">
-                🎤
+            <button type="button" id="record-button" title="Gravar audio" aria-label="Gravar audio">
+                <i data-lucide="mic"></i>
             </button>
 
             <button
                 type="submit"
                 id="send-button"
-                class="btn btn-success"
                 title="{% if chat %}Enviar mensagem{% else %}Iniciar chat{% endif %}"
                 aria-label="{% if chat %}Enviar mensagem{% else %}Iniciar chat{% endif %}">
-                {% if chat %}📤{% else %}🆕{% endif %}
+                {% if chat %}<i data-lucide="send"></i>{% else %}<i data-lucide="plus"></i>{% endif %}
             </button>
         </div>
 
         <div id="fileIndicators" class="file-indicators">
-            <span id="documentIndicator" style="display: none;">📄 Documento selecionado</span>
-            <span id="imageIndicator" style="display: none;">🖼️ Imagem selecionada</span>
-            <span id="videoIndicator" style="display: none;">🎬 Video selecionado</span>
-            <span id="audioIndicator" style="display: none;">🎤 Audio selecionado</span>
-            <span id="recordingIndicator" style="display: none; color: red;">🔴 Gravando...</span>
+            <span id="documentIndicator" style="display: none;">Documento selecionado</span>
+            <span id="imageIndicator" style="display: none;">Imagem selecionada</span>
+            <span id="videoIndicator" style="display: none;">Video selecionado</span>
+            <span id="audioIndicator" style="display: none;">Audio selecionado</span>
+            <span id="recordingIndicator" style="display: none; color: var(--error);">Gravando...</span>
         </div>
 
         <div id="imagePreview" class="media-preview" style="display: none;">
             <img id="previewImg" style="max-width: 200px; max-height: 200px; border-radius: 8px;">
-            <button type="button" id="deleteImage" class="btn btn-danger btn-sm" aria-label="Remover imagem">Remover</button>
+            <button type="button" id="deleteImage" class="btn btn-secondary btn-sm" aria-label="Remover imagem">Remover</button>
         </div>
 
         <div id="videoPreview" class="media-preview" style="display: none;">
             <video id="previewVideo" controls style="max-width: 100%; max-height: 200px;"></video>
-            <button type="button" id="deleteVideo" class="btn btn-danger btn-sm" aria-label="Remover video">Remover</button>
+            <button type="button" id="deleteVideo" class="btn btn-secondary btn-sm" aria-label="Remover video">Remover</button>
         </div>
 
         <div id="audioPlayer" class="media-preview" style="display: none;">
             <audio controls id="recordedAudio"></audio>
-            <button type="button" id="deleteRecording" class="btn btn-danger btn-sm" aria-label="Excluir gravacao">Excluir</button>
+            <button type="button" id="deleteRecording" class="btn btn-secondary btn-sm" aria-label="Excluir gravacao">Excluir</button>
         </div>
     </div>
 </form>
 
-<script src="{% static 'js/chatInput.js' %}?v=124"></script>
+<script src="{% static 'js/chatInput.js' %}?v=201"></script>

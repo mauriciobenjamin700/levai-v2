@@ -4,38 +4,30 @@
 {% block title %}LevAI - {{ chat.title }}{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/home.css' %}?v=124">
-<link rel="stylesheet" href="{% static 'css/chat.css' %}?v=124">
+<link rel="stylesheet" href="{% static 'css/chat.css' %}?v=202">
 {% endblock %}
 
 {% block content %}
-{% include "partials/chat_input.html" %}
-<h1>{{ chat.id }}</h1>
-<div class="chat-history-container">
-    {% for message in chat.messages %}
-        <div class="message-card">
-            <div class="message-header">
-                {% if message.role == 'assistant' %}
-                    <img src="{% static 'images/robot.png' %}" alt="Assistente IA" class="avatar">
-                {% elif message.role == 'user' %}
-                    <img src="{% static 'images/human.png' %}" alt="Usuario" class="avatar">
-                {% else %}
-                    <img src="{% static 'images/default.png' %}" alt="Avatar" class="avatar">
-                {% endif %}
+<div id="chat-page">
+    {% include "partials/chat_input.html" %}
+    <p class="chat-detail-header">{{ chat.id }}</p>
+    <div class="chat-messages-container">
+        {% for message in chat.messages %}
+            <div class="message-card role-{{ message.role }}">
                 <span class="message-role">{{ message.role }}</span>
+                <div class="message-bubble">{{ message.content }}</div>
             </div>
-            <p class="message-content">{{ message.content }}</p>
-        </div>
-    {% endfor %}
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        var chatMessages = document.querySelector(".chat-messages");
-        if (chatMessages) {
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+        var container = document.querySelector(".chat-messages-container");
+        if (container) {
+            container.scrollTop = container.scrollHeight;
         }
     });
 </script>
