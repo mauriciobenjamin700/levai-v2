@@ -32,7 +32,6 @@ def download_view(request: HttpRequest) -> HttpResponse | FileResponse:
     if request.method == "POST":
         url = request.POST.get("url")
         file_name = request.POST.get("file_name")
-        print("URL: ", url)
         if url:
 
             file_path = download_video_hd(url)
@@ -52,7 +51,6 @@ def download_view(request: HttpRequest) -> HttpResponse | FileResponse:
 
         if file_path:
 
-            print("file_path: ", file_path)
             return FileResponse(
                 open(file_path, "rb"),
                 as_attachment=True,

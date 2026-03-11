@@ -1,32 +1,17 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página Não Encontrada - LevAI</title>
-    <link rel="stylesheet" href="{% static 'css/global.css' %}">
-    <link rel="stylesheet" href="{% static 'css/error.css' %}">
-</head>
-<body>
-    <div class="error-container">
-        <div class="error-content">
-            <h1 class="error-code">404</h1>
-            <h2 class="error-title">Oops! Página não encontrada</h2>
-            <p class="error-message">
-                A página que você está procurando não existe ou foi movida.
-            </p>
-            <div class="error-actions">
-                <a href="{% url 'home' %}" class="btn-primary">Voltar ao Início</a>
-                <a href="{% url 'chat_view' %}" class="btn-secondary">Ir para o Chat</a>
-            </div>
-            <div class="error-illustration">
-                <svg width="200" height="200" viewBox="0 0 200 200">
-                    <circle cx="100" cy="100" r="80" fill="var(--bg-secondary)" stroke="var(--border-light)" stroke-width="2"/>
-                    <text x="100" y="110" text-anchor="middle" fill="var(--text-muted)" font-size="24">404</text>
-                </svg>
-            </div>
-        </div>
+{% extends "base.html" %}
+
+{% block title %}Pagina Nao Encontrada - LevAI{% endblock %}
+
+{% block body %}
+<div class="error-container">
+    <div class="error-code">404</div>
+    <h2 class="error-title">Pagina nao encontrada</h2>
+    <p class="error-message">
+        A pagina que voce esta procurando nao existe ou foi movida.
+    </p>
+    <div class="error-actions">
+        <a href="/" class="btn btn-primary">Voltar ao Inicio</a>
+        <a href="/chat" class="btn btn-secondary">Ir para o Chat</a>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}
