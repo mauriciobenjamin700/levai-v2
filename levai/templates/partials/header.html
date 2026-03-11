@@ -1,6 +1,9 @@
 <header id="header" class="headerContainer">
+    <button id="menuToggle" class="menu-toggle" aria-label="Abrir menu de navegacao">
+        <span class="menu-icon"></span>
+    </button>
     <h1><a href="/">LevAI</a></h1>
-    <p>Um assistente de IA para o seu dia a dia.</p>
+    <p class="header-tagline">Um assistente de IA para o seu dia a dia.</p>
     <div class="headerProfile">
         <p>{{ request.user.username }}</p>
         <form action="{% url 'logout' %}" method="post" style="display:inline;">

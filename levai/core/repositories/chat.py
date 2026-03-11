@@ -15,7 +15,7 @@ class ChatRepository:
     """Repository for managing chat sessions and messages."""
 
     @staticmethod
-    def create_chat(user: User, title: SyntaxError) -> Chat:
+    def create_chat(user: User, title: str) -> Chat:
         """Create a new chat session for a user.
 
         Args:
@@ -130,54 +130,33 @@ class ChatRepository:
 
     @staticmethod
     def add_chat_message(model: ChatMessage) -> ChatMessage:
-        """Add a new chat message to the database."""
-        try:
-            print("=== DEBUG ADD_CHAT_MESSAGE ===")
-            print(f"model: {model}")
-            print(f"model.chat: {model.chat}")
-            print(f"model.role: {model.role}")
-            print(f"model.content: {model.content[:50]}...")
+        """Add a new chat message to the database.
 
-            # Verificar role
-            print(f"ChatRole.values(): {ChatRole.values()}")
-            print(f"model.role in ChatRole.values(): {model.role in ChatRole.values()}")
+        Args:
+            model (ChatMessage): The chat message model instance.
 
-            if model.role not in ChatRole.values():
-                error_msg = (
-                    f"Invalid role: {model.role}. Must be one of {ChatRole.values()}."
-                )
-                print(f"ERRO DE ROLE: {error_msg}")
-                raise ValueError(error_msg)
+        Returns:
+            ChatMessage: The saved chat message.
 
-            # Verificar se chat existe
-            chat_exists = Chat.objects.filter(id=model.chat.id).exists()
-            print(f"Chat exists: {chat_exists}")
+        Raises:
+            ValueError: If the role is invalid or chat does not exist.
 
-            if not chat_exists:
-                error_msg = f"Chat with ID {model.chat.id} does not exist."
-                print(f"ERRO DE CHAT: {error_msg}")
-                raise ValueError(error_msg)
+        """
+        if model.role not in ChatRole.values():
+            raise ValueError(
+                f"Invalid role: {model.role}. "
+                f"Must be one of {ChatRole.values()}."
+            )
 
-            print("Executando full_clean()...")
-            model.full_clean()
-            print("full_clean() OK")
+        if not Chat.objects.filter(id=model.chat.id).exists():
+            raise ValueError(
+                f"Chat with ID {model.chat.id} "
+                f"does not exist."
+            )
 
-            print("Executando save()...")
-            model.save()
-            print("save() OK")
-
-            print("=== ADD_CHAT_MESSAGE SUCCESS ===")
-            return model
-
-        except Exception as e:
-            print("=== ERRO EM ADD_CHAT_MESSAGE ===")
-            print(f"Erro: {e}")
-            print(f"Tipo: {type(e)}")
-            import traceback
-
-            traceback.print_exc()
-            print("=== FIM DO ERRO ===")
-            raise
+        model.full_clean()
+        model.save()
+        return model
 
     @staticmethod
     def get_chat_messages(chat_id: str) -> list[ChatMessage]:

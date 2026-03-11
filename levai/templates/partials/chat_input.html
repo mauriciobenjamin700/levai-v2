@@ -1,92 +1,77 @@
 {% load static %}
-<head>
-    <script src="{% static 'js/scripts.js' %}"></script>
-</head>
-<form 
-    id="chatForm" 
-    method="post" 
-    action="{% if chat %}/chat/{{ chat.id }}/{% else %}/chat/{% endif %}" 
+<form
+    id="chatForm"
+    method="post"
+    action="{% if chat %}/chat/{{ chat.id }}/{% else %}/chat/{% endif %}"
     enctype="multipart/form-data">
     {% csrf_token %}
 
-     <!-- ✅ Campo hidden com chat_id se existir -->
     {% if chat %}
         <input type="hidden" name="chat_id" value="{{ chat.id }}">
     {% endif %}
 
     <div id="searchContainer" class="searchContainer">
-        <!-- Campo de texto obrigatório -->
         <textarea id="search" name="message" placeholder="Pergunte o que quiser..." rows="3" required></textarea>
-        
-        <!-- Campos ocultos para todos os tipos de arquivo -->
+
         <input type="file" id="document" name="document" accept=".pdf,.txt,.doc,.docx,.csv,.json" style="display: none;">
         <input type="file" id="audio" name="audio" accept="audio/*" style="display: none;">
         <input type="file" id="image" name="image" accept="image/*" style="display: none;">
         <input type="file" id="video" name="video" accept="video/*" style="display: none;">
-        
+
         <div class="buttonContainer">
-            <!-- Botão para selecionar documento -->
-            <button type="button" id="search-button" class="btn btn-primary" title="Upload de documento">
+            <button type="button" id="search-button" class="btn btn-primary" title="Upload de documento" aria-label="Upload de documento">
                 📄
             </button>
-            
-            <!-- Botão para selecionar imagem -->
-            <button type="button" id="image-button" class="btn btn-info" title="Upload de imagem">
+
+            <button type="button" id="image-button" class="btn btn-info" title="Upload de imagem" aria-label="Upload de imagem">
                 🖼️
             </button>
-            
-            <!-- Botão para selecionar vídeo -->
-            <button type="button" id="video-button" class="btn btn-purple" title="Upload de vídeo">
+
+            <button type="button" id="video-button" class="btn btn-purple" title="Upload de video" aria-label="Upload de video">
                 🎬
             </button>
-            
-            <!-- Botão para selecionar áudio de arquivo -->
-            <button type="button" id="upload-audio-button" class="btn btn-secondary" title="Upload de áudio">
+
+            <button type="button" id="upload-audio-button" class="btn btn-secondary" title="Upload de audio" aria-label="Upload de audio">
                 🎵
             </button>
-            
-            <!-- Botão para gravar áudio -->
-            <button type="button" id="record-button" class="btn btn-warning" title="Gravar áudio">
+
+            <button type="button" id="record-button" class="btn btn-warning" title="Gravar audio" aria-label="Gravar audio">
                 🎤
             </button>
-            
-            <!-- Botão de envio -->
-            <button 
-                type="submit" 
-                id="send-button" 
-                class="btn btn-success" 
-                title="{% if chat %}Enviar mensagem{% else %}Iniciar chat{% endif %}">
+
+            <button
+                type="submit"
+                id="send-button"
+                class="btn btn-success"
+                title="{% if chat %}Enviar mensagem{% else %}Iniciar chat{% endif %}"
+                aria-label="{% if chat %}Enviar mensagem{% else %}Iniciar chat{% endif %}">
                 {% if chat %}📤{% else %}🆕{% endif %}
             </button>
         </div>
-        
-        <!-- Indicadores de arquivos selecionados -->
-        <div id="fileIndicators" style="margin-top: 10px;">
+
+        <div id="fileIndicators" class="file-indicators">
             <span id="documentIndicator" style="display: none;">📄 Documento selecionado</span>
             <span id="imageIndicator" style="display: none;">🖼️ Imagem selecionada</span>
-            <span id="videoIndicator" style="display: none;">🎬 Vídeo selecionado</span>
-            <span id="audioIndicator" style="display: none;">🎤 Áudio selecionado</span>
+            <span id="videoIndicator" style="display: none;">🎬 Video selecionado</span>
+            <span id="audioIndicator" style="display: none;">🎤 Audio selecionado</span>
             <span id="recordingIndicator" style="display: none; color: red;">🔴 Gravando...</span>
         </div>
-        
-        <!-- Preview de imagem -->
-        <div id="imagePreview" style="display: none; margin-top: 10px;">
+
+        <div id="imagePreview" class="media-preview" style="display: none;">
             <img id="previewImg" style="max-width: 200px; max-height: 200px; border-radius: 8px;">
-            <button type="button" id="deleteImage" class="btn btn-danger btn-sm">🗑️ Remover</button>
+            <button type="button" id="deleteImage" class="btn btn-danger btn-sm" aria-label="Remover imagem">Remover</button>
         </div>
-        
-        <!-- Preview de vídeo -->
-        <div id="videoPreview" style="display: none; margin-top: 10px;">
-            <video id="previewVideo" controls style="max-width: 300px; max-height: 200px;"></video>
-            <button type="button" id="deleteVideo" class="btn btn-danger btn-sm">🗑️ Remover</button>
+
+        <div id="videoPreview" class="media-preview" style="display: none;">
+            <video id="previewVideo" controls style="max-width: 100%; max-height: 200px;"></video>
+            <button type="button" id="deleteVideo" class="btn btn-danger btn-sm" aria-label="Remover video">Remover</button>
         </div>
-        
-        <!-- Player para reproduzir áudio gravado -->
-        <div id="audioPlayer" style="display: none; margin-top: 10px;">
+
+        <div id="audioPlayer" class="media-preview" style="display: none;">
             <audio controls id="recordedAudio"></audio>
-            <button type="button" id="deleteRecording" class="btn btn-danger btn-sm">🗑️ Excluir</button>
+            <button type="button" id="deleteRecording" class="btn btn-danger btn-sm" aria-label="Excluir gravacao">Excluir</button>
         </div>
     </div>
 </form>
 
-<script src="{% static 'js/chatInput.js' %}"></script>
+<script src="{% static 'js/chatInput.js' %}?v=124"></script>

@@ -179,22 +179,30 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('videoIndicator').style.display = 'none';
     }
     
-    // Validação e envio do formulário
+    // Validacao e envio do formulario
     document.getElementById('chatForm').addEventListener('submit', function(e) {
         const message = document.getElementById('search').value.trim();
-        
+
         if (!message) {
             e.preventDefault();
             alert('Por favor, digite uma mensagem!');
             return false;
         }
-        
-        // Se há áudio gravado, criar arquivo e adicionar ao form
+
+        // Se ha audio gravado, criar arquivo e adicionar ao form
         if (recordedBlob) {
             const file = new File([recordedBlob], 'recorded_audio.wav', { type: 'audio/wav' });
             const dataTransfer = new DataTransfer();
             dataTransfer.items.add(file);
             document.getElementById('audio').files = dataTransfer.files;
+        }
+
+        // Loading state - desabilitar botao e mostrar feedback
+        const sendButton = document.getElementById('send-button');
+        if (sendButton) {
+            sendButton.disabled = true;
+            sendButton.textContent = '...';
+            sendButton.setAttribute('title', 'Enviando...');
         }
     });
 });
