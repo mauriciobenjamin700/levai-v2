@@ -1,4 +1,4 @@
-"""Video Views."""
+"""Video application views module."""
 
 import os
 from os.path import abspath, dirname, join
@@ -20,21 +20,23 @@ from levai.core.utils.upload import save_uploaded_file
 
 @login_required
 def download_view(request: HttpRequest) -> HttpResponse | FileResponse:
-    """Download a video by url.
+    """Download a video by URL and return it as a file response.
 
     Args:
-        request (HttpRequest): The request object containing the video URL and file name
+        request (HttpRequest): The request object containing the video
+            URL and file name in POST data.
 
-    Return:
-        HttpResponse | FileResponse: A response containing the video file for download.
+    Returns:
+        HttpResponse | FileResponse: A file response with the downloaded
+            video, or the rendered download form.
 
     """
     if request.method == "POST":
-        url = request.POST.get("url")
-        file_name = request.POST.get("file_name")
+        url: str | None = request.POST.get("url")
+        file_name: str | None = request.POST.get("file_name")
         if url:
 
-            file_path = download_video_hd(url)
+            file_path: str | None = download_video_hd(url)
 
             file_path = abspath(
                 join(
@@ -65,20 +67,27 @@ def download_view(request: HttpRequest) -> HttpResponse | FileResponse:
 
 @login_required
 def convert_video_to_audio(request: HttpRequest) -> HttpResponse:
-    """Converte vídeo para MP3 e oferece download."""
+    """Convert a video file to MP3 and offer it for download.
+
+    Args:
+        request (HttpRequest): The request object containing the video
+            file in FILES data.
+
+    Returns:
+        HttpResponse: A file response with the MP3 audio, or the
+            rendered conversion form.
+
+    """
     if request.method == "POST":
         video_file = request.FILES.get("video")
 
         if video_file:
             try:
-                # Salvar vídeo temporariamente
-                video_path = save_uploaded_file(video_file, UploadDirs.VIDEOS)
-                full_video_path = os.path.join(settings.MEDIA_ROOT, video_path)
+                video_path: str = save_uploaded_file(video_file, UploadDirs.VIDEOS)
+                full_video_path: str = os.path.join(settings.MEDIA_ROOT, video_path)
 
-                # Converter para MP3
-                mp3_path = video_to_mp3_moviepy(full_video_path)
+                mp3_path: str = video_to_mp3_moviepy(full_video_path)
 
-                # Retornar arquivo MP3 para download
                 return FileResponse(
                     open(mp3_path, "rb"),
                     as_attachment=True,
@@ -96,13 +105,15 @@ def convert_video_to_audio(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def convert_to_mp4_view(request: HttpRequest) -> HttpResponse:
-    """Converte vídeo para MP4 e oferece download.
+    """Convert a video file to MP4 and offer it for download.
 
     Args:
-        request (HttpRequest): Request contendo o arquivo de vídeo
+        request (HttpRequest): The request object containing the video
+            file in FILES data.
 
     Returns:
-        HttpResponse: Resposta com download do MP4 ou template
+        HttpResponse: A file response with the MP4 video, or a redirect
+            to the conversion form.
 
     """
     if request.method == "POST":
@@ -112,8 +123,7 @@ def convert_to_mp4_view(request: HttpRequest) -> HttpResponse:
             messages.error(request, "Nenhum vídeo selecionado!")
             return redirect("convert_to_mp4")
 
-        # Verificar formato suportado
-        allowed_extensions = [
+        allowed_extensions: list[str] = [
             ".mov",
             ".avi",
             ".mkv",
@@ -122,40 +132,33 @@ def convert_to_mp4_view(request: HttpRequest) -> HttpResponse:
             ".webm",
             ".m4v",
         ]
-        file_extension = Path(video_file.name).suffix.lower()
+        file_extension: str = Path(video_file.name).suffix.lower()
 
         if file_extension not in allowed_extensions:
             messages.error(
                 request,
                 f"""
-                Formato não suportado: {file_extension}. 
+                Formato não suportado: {file_extension}.
                 Use: {', '.join(allowed_extensions)}
                 """,
             )
             return redirect("convert_to_mp4")
 
         try:
-            # Salvar vídeo temporariamente
-            video_path = save_uploaded_file(video_file, UploadDirs.VIDEOS)
-            full_video_path = os.path.join(settings.MEDIA_ROOT, video_path)
+            video_path: str = save_uploaded_file(video_file, UploadDirs.VIDEOS)
+            full_video_path: str = os.path.join(settings.MEDIA_ROOT, video_path)
 
-            # Converter para MP4
-            mp4_path = convert_to_mp4_moviepy(full_video_path)
+            mp4_path: str = convert_to_mp4_moviepy(full_video_path)
 
             if os.path.exists(mp4_path):
-                # Gerar nome do arquivo para download
-                original_name = Path(video_file.name).stem
-                download_filename = f"{original_name}_converted.mp4"
+                original_name: str = Path(video_file.name).stem
+                download_filename: str = f"{original_name}_converted.mp4"
 
-                # Retornar arquivo MP4 para download
-                response = FileResponse(
+                response: FileResponse = FileResponse(
                     open(mp4_path, "rb"),
                     as_attachment=True,
                     filename=download_filename,
                 )
-
-                # Opcional: Limpar arquivos temporários após um tempo
-                # cleanup_temp_files.delay(full_video_path, mp4_path)  # Se usar Celery
 
                 return response
             else:
@@ -168,5 +171,4 @@ def convert_to_mp4_view(request: HttpRequest) -> HttpResponse:
 
         return redirect("convert_to_mp4")
 
-    # GET request - mostrar formulário
     return render(request, "convert_to_mp4.html")

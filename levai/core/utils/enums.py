@@ -1,61 +1,60 @@
-"""Enums of project."""
+"""Enum definitions for the project."""
 
 from enum import Enum
 
 
 class BaseEnum(Enum):
-    """Base Enum class to ensure all enums in the project inherit from this."""
+    """Base Enum class to ensure all enums in the project inherit from this.
+
+    Provides utility methods for accessing enum choices, keys,
+    and values, as well as string representations.
+
+    """
 
     @classmethod
-    def choices(cls):
-        """Possibles choices of enum.
+    def choices(cls) -> list[tuple[str, str]]:
+        """Return all enum members as a list of (name, value) tuples.
 
-        Return:
-            list[str]: Values of Enum
+        Returns:
+            list[tuple[str, str]]: List of (name, value) pairs.
 
         """
         return [(item.name, item.value) for item in cls]
 
     @classmethod
-    def keys(cls):
-        """Possibles keys of enum.
+    def keys(cls) -> list[str]:
+        """Return all enum member names.
 
-        Return:
-            list[str]: Names of Enum
+        Returns:
+            list[str]: List of enum member names.
 
         """
         return [item.name for item in cls]
 
     @classmethod
-    def values(cls):
-        """Values of enum.
+    def values(cls) -> list[str]:
+        """Return all enum member values.
 
-        Return:
-            list[str]: Values of Enum
+        Returns:
+            list[str]: List of enum member values.
 
         """
         return [item.value for item in cls]
 
-    def __str__(self):
-        """Representation of the enum instance like a string.
+    def __str__(self) -> str:
+        """Return the string representation of the enum value.
 
-        Args:
-            None:
-
-        Return:
+        Returns:
             str: The string representation of the enum value.
 
         """
         return str(self.value)
 
-    def __repr__(self):
-        """Representation of the enum instance.
+    def __repr__(self) -> str:
+        """Return a detailed string representation of the enum instance.
 
-        Args:
-            None:
-
-        Return:
-            str: A string representation of the enum instance.
+        Returns:
+            str: A string in the format ClassName.MEMBER(value).
 
         """
         return f"{self.__class__.__name__}.{self.name}({self.value})"
@@ -91,3 +90,33 @@ class UploadDirs(BaseEnum):
     VIDEOS = "videos"
     IMAGES = "images"
     AUDIO = "audio"
+
+
+class TaskPriority(BaseEnum):
+    """Enum representing the priority level of a task.
+
+    Attributes:
+        LOW: Low priority task.
+        MEDIUM: Medium priority task.
+        HIGH: High priority task.
+
+    """
+
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+
+
+class TaskStatus(BaseEnum):
+    """Enum representing the status of a task.
+
+    Attributes:
+        PENDING: Task has not been started.
+        IN_PROGRESS: Task is currently being worked on.
+        DONE: Task has been completed.
+
+    """
+
+    PENDING = "pending"
+    IN_PROGRESS = "in_progress"
+    DONE = "done"

@@ -17,16 +17,12 @@
             <div class="passwordContainer">
                 <input type="password" id="password" name="password" required>
                 <button type="button" id="togglePassword">
-                    <img
-                        id="eyeIcon"
-                        src="{% static 'images/eyesclose.svg' %}"
-                        alt="Mostrar Senha"
-                    >
+                    <i id="eyeIcon" data-lucide="eye-off"></i>
                 </button>
             </div>
         </div>
         <button type="submit">Entrar</button>
-        <p>Nao tem uma conta? <a href="/auth/register">Registrar</a></p>
+        <p>Não tem uma conta? <a href="/auth/register">Registrar</a></p>
         <p><a href="/forgot-password">Esqueci minha senha</a></p>
     </form>
 </div>

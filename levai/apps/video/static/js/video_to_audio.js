@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function() {
     videoForm.addEventListener("submit", function(e) {
         if (!videoInput.files.length) {
             e.preventDefault();
-            alert("Por favor, selecione um video!");
+            LevAI.toast("Por favor, selecione um vídeo!", "warning");
             return;
         }
 

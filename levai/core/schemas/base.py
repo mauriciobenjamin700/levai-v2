@@ -4,22 +4,36 @@ from pydantic import BaseModel, ConfigDict
 
 
 class BaseSchema(BaseModel):
-    """Base schema for all Pydantic models in the application."""
+    """Base schema for all Pydantic models in the application.
+
+    Provides shared configuration and utility methods for
+    serialization and deserialization of Pydantic models.
+
+    """
 
     model_config = ConfigDict(use_enum_values=True, from_attributes=True)
 
-    def to_dict(self, exclude: list[str] = [], include: dict = {}) -> dict:
+    def to_dict(
+        self,
+        exclude: list[str] | None = None,
+        include: dict[str, object] | None = None,
+    ) -> dict[str, object]:
         """Convert the Pydantic model instance to a dictionary.
 
         Args:
-            exclude (list[str]): List of fields to exclude from the dictionary.
-            include (dict): Dictionary of fields to include in the dictionary.
+            exclude (list[str] | None): List of fields to exclude from
+                the dictionary. Defaults to None.
+            include (dict[str, object] | None): Additional key-value pairs
+                to merge into the dictionary. Defaults to None.
 
         Returns:
-            dict: Dictionary representation of the Pydantic model instance.
+            dict[str, object]: Dictionary representation of the model.
 
         """
-        data = {
+        if exclude is None:
+            exclude = []
+
+        data: dict[str, object] = {
             key: value
             for key, value in self.model_dump(exclude_none=True).items()
             if key not in exclude
@@ -34,10 +48,11 @@ class BaseSchema(BaseModel):
         """Populate the Pydantic model instance from an object.
 
         Args:
-            obj (object): The object to populate the Pydantic model instance from.
+            obj (object): The object to populate the Pydantic model
+                instance from.
 
         Returns:
-            BaseSchema: The Pydantic model instance populated with data from the object.
+            BaseSchema: The populated Pydantic model instance.
 
         """
         return self.model_validate(obj)

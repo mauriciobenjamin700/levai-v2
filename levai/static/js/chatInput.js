@@ -151,7 +151,7 @@ document.addEventListener("DOMContentLoaded", function() {
             document.getElementById("recordingIndicator").style.display = "inline";
 
         }).catch(function(error) {
-            alert("Erro ao acessar microfone: " + error.message);
+            LevAI.toast("Erro ao acessar microfone: " + error.message, "error");
         });
     }
 
@@ -192,7 +192,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (!message) {
             e.preventDefault();
-            alert("Por favor, digite uma mensagem!");
+            LevAI.toast("Por favor, digite uma mensagem!", "warning");
             return false;
         }
 

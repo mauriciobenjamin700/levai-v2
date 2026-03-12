@@ -8,8 +8,13 @@ from django.db import models
 from levai.apps.user.models import User
 
 
-def default_chat_title():
-    """Default title for a chat session."""
+def default_chat_title() -> str:
+    """Generate a default title for a chat session.
+
+    Returns:
+        str: A title string with the current date and time.
+
+    """
     return f"Chat {datetime.now().strftime('%d/%m %H:%M')}"
 
 
@@ -19,7 +24,7 @@ class Chat(models.Model):
     Attributes:
         id (int): Unique identifier for the chat session.
         title (str): Title of the chat session.
-        user (User): Foreign key to the User model, representing the user who owns the
+        user (User): Foreign key to the User model.
         created_at (datetime): Timestamp when the chat session was created.
         updated_at (datetime): Timestamp when the chat session was last updated.
 
@@ -33,11 +38,11 @@ class Chat(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        """String representation of the Chat instance.
+    def __str__(self) -> str:
+        """Return a string representation of the Chat instance.
 
         Returns:
-            str: The title of the chat session.
+            str: Formatted string with chat details.
 
         """
         return f"""
@@ -75,17 +80,17 @@ class ChatMessage(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        """Meta options for the Chat model."""
+        """Meta options for the ChatMessage model."""
 
         db_table = "chat_messages"
         verbose_name = "Chat_messages"
         verbose_name_plural = "Chat_messages"
 
-    def __str__(self):
-        """String representation of the ChatMessage instance.
+    def __str__(self) -> str:
+        """Return a string representation of the ChatMessage instance.
 
         Returns:
-            str: The content of the chat message.
+            str: Formatted string with message details.
 
         """
         return f"""

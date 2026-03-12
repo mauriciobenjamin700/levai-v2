@@ -144,15 +144,11 @@ class ChatRepository:
         """
         if model.role not in ChatRole.values():
             raise ValueError(
-                f"Invalid role: {model.role}. "
-                f"Must be one of {ChatRole.values()}."
+                f"Invalid role: {model.role}. " f"Must be one of {ChatRole.values()}."
             )
 
         if not Chat.objects.filter(id=model.chat.id).exists():
-            raise ValueError(
-                f"Chat with ID {model.chat.id} "
-                f"does not exist."
-            )
+            raise ValueError(f"Chat with ID {model.chat.id} " f"does not exist.")
 
         model.full_clean()
         model.save()

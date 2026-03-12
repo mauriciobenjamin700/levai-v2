@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Tarefas - LevAI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/task.css' %}?v=300">
+{% endblock %}
+
+{% block content %}
+<div id="task-page">
+    <div class="calendar-header">
+        <a href="?year={{ prev_year }}&month={{ prev_month }}" class="btn-nav" aria-label="Mês anterior">
+            <i data-lucide="chevron-left"></i>
+        </a>
+        <h2>{{ month_name }} {{ year }}</h2>
+        <a href="?year={{ next_year }}&month={{ next_month }}" class="btn-nav" aria-label="Próximo mês">
+            <i data-lucide="chevron-right"></i>
+        </a>
+    </div>
+
+    <div class="calendar-grid">
+        <div class="calendar-dow">Dom</div>
+        <div class="calendar-dow">Seg</div>
+        <div class="calendar-dow">Ter</div>
+        <div class="calendar-dow">Qua</div>
+        <div class="calendar-dow">Qui</div>
+        <div class="calendar-dow">Sex</div>
+        <div class="calendar-dow">Sáb</div>
+
+        {% for week in weeks %}
+            {% for cell in week %}
+                {% if cell.day == 0 %}
+                    <div class="calendar-cell empty"></div>
+                {% else %}
+                    <div class="calendar-cell {% if cell.day == today_day %}today{% endif %}"
+                         onclick="openCreateModal({{ year }}, {{ month }}, {{ cell.day }})">
+                        <span class="day-number {% if cell.day == today_day %}today-number{% endif %}">{{ cell.day }}</span>
+                        <div class="day-tasks">
+                            {% for task in cell.tasks %}
+                                <div class="task-chip priority-{{ task.priority }} {% if task.status == 'done' %}status-done{% endif %}"
+                                     onclick="openEditModal('{{ task.id }}', event)"
+                                     title="{{ task.title }}">
+                                    {% if task.time %}<span class="task-time">{{ task.time|time:"H:i" }}</span>{% endif %}
+                                    {{ task.title }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    </div>
+
+    <div class="task-list-mobile">
+        {% for task in tasks_list %}
+            <div class="task-list-item priority-{{ task.priority }} {% if task.status == 'done' %}status-done{% endif %}"
+                 onclick="openEditModal('{{ task.id }}', event)">
+                <div class="task-list-date">{{ task.date|date:"d/m" }}</div>
+                <div class="task-list-info">
+                    <span class="task-list-title">{{ task.title }}</span>
+                    {% if task.time %}<span class="task-list-time">{{ task.time|time:"H:i" }}</span>{% endif %}
+                </div>
+                <span class="priority-badge priority-{{ task.priority }}">{{ task.get_priority_display|default:task.priority }}</span>
+            </div>
+        {% empty %}
+            <div class="empty-state">
+                <i data-lucide="calendar-x"></i>
+                <p>Nenhuma tarefa neste mês.</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <button class="fab-add" onclick="openCreateModalToday()" aria-label="Nova tarefa">
+        <i data-lucide="plus"></i>
+    </button>
+</div>
+
+<div id="taskModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modalTitle">Nova Tarefa</h3>
+            <button onclick="closeModal()" class="modal-close" aria-label="Fechar">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        <form id="taskForm" method="POST" action="{% url 'task_create' %}">
+            {% csrf_token %}
+            <input type="hidden" id="taskId" name="task_id" value="">
+
+            <div class="form-group">
+                <label for="taskTitle">Título</label>
+                <input type="text" id="taskTitle" name="title" required placeholder="Nome da tarefa">
+            </div>
+
+            <div class="form-group">
+                <label for="taskDescription">Descrição</label>
+                <textarea id="taskDescription" name="description" rows="3" placeholder="Detalhes (opcional)"></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="taskDate">Data</label>
+                    <input type="date" id="taskDate" name="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="taskTime">Horário</label>
+                    <input type="time" id="taskTime" name="time">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="taskPriority">Prioridade</label>
+                    <select id="taskPriority" name="priority">
+                        <option value="low">Baixa</option>
+                        <option value="medium" selected>Média</option>
+                        <option value="high">Alta</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="taskStatus">Status</label>
+                    <select id="taskStatus" name="status">
+                        <option value="pending">Pendente</option>
+                        <option value="in_progress">Em Progresso</option>
+                        <option value="done">Concluída</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" id="deleteBtn" class="btn btn-danger" style="display: none;"
+                        onclick="deleteTask()">
+                    <i data-lucide="trash-2"></i>
+                    Excluir
+                </button>
+                <div class="modal-actions-right">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i data-lucide="check"></i>
+                        Salvar
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/task.js' %}?v=300"></script>
+{% endblock %}

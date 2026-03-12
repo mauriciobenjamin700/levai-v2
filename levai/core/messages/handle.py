@@ -19,7 +19,7 @@ def handle_error_message(request: HttpRequest, error: Exception) -> None:
 
 
 def handle_success_message(request: HttpRequest, message: str) -> None:
-    """Handle error messages by displaying them to the user.
+    """Handle success messages by displaying them to the user.
 
     Args:
         request (HttpRequest): The HTTP request object.

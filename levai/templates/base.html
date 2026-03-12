@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/global.css' %}?v=200">
+    <link rel="stylesheet" href="{% static 'css/global.css' %}?v=300">
     {% block extra_css %}{% endblock %}
     <script>
         (function() {
@@ -29,8 +29,9 @@
         </div>
     </div>
     {% endblock %}
+    <div class="toast-container" id="toastContainer"></div>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    <script src="{% static 'js/global.js' %}?v=201"></script>
+    <script src="{% static 'js/global.js' %}?v=300"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

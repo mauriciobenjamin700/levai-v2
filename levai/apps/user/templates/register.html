@@ -21,16 +21,12 @@
             <div class="passwordContainer">
                 <input type="password" id="password" name="password" required>
                 <button type="button" id="togglePassword">
-                    <img
-                        id="eyeIcon"
-                        src="{% static 'images/eyesclose.svg' %}"
-                        alt="Mostrar Senha"
-                    >
+                    <i id="eyeIcon" data-lucide="eye-off"></i>
                 </button>
             </div>
         </div>
         <button type="submit">Registrar</button>
-        <p>Ja tem uma conta? <a href="/auth/login">Entrar</a></p>
+        <p>Já tem uma conta? <a href="/auth/login">Entrar</a></p>
     </form>
 </div>
 {% endblock %}

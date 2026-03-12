@@ -28,6 +28,7 @@ urlpatterns = [
     path("chat/", include("levai.apps.chat.urls")),
     path("document/", include("levai.apps.document.urls")),
     path("video/", include("levai.apps.video.urls")),
+    path("task/", include("levai.apps.task.urls")),
 ]
 
 # Para desenvolvimento

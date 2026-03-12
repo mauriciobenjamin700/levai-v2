@@ -1,23 +1,22 @@
 """Chat application views module."""
 
 import logging
-from typing import Optional
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse
 
 from levai.apps.chat.controller import ChatController
 
-logger = logging.getLogger(__name__)
+logger: logging.Logger = logging.getLogger(__name__)
 
 
 @login_required
-def chat_view(request: HttpRequest, chat_id: Optional[str] = None) -> HttpResponse:
+def chat_view(request: HttpRequest, chat_id: str | None = None) -> HttpResponse:
     """Render the chat view for authenticated users.
 
     Args:
         request (HttpRequest): The HTTP request object.
-        chat_id (str, optional): The ID of the chat to display.
+        chat_id (str | None): The ID of the chat to display.
 
     Returns:
         HttpResponse: Rendered chat view.

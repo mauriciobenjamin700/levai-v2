@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/chat.css' %}?v=201">
+<link rel="stylesheet" href="{% static 'css/chat.css' %}?v=300">
 {% endblock %}
 
 {% block content %}
@@ -20,8 +20,13 @@
                     <span class="chat-timestamp">{{ chat.created_at }}</span>
                 </div>
                 <div class="chat-content">
-                    <p>Hello World</p>
+                    <p>{{ chat.preview|default:"Nova conversa" }}</p>
                 </div>
+            </div>
+        {% empty %}
+            <div class="empty-state">
+                <i data-lucide="message-circle"></i>
+                <p>Nenhuma conversa ainda. Comece uma nova!</p>
             </div>
         {% endfor %}
     </div>
@@ -29,5 +34,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'js/openChat.js' %}?v=201"></script>
+<script src="{% static 'js/openChat.js' %}?v=300"></script>
 {% endblock %}

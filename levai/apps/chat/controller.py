@@ -104,7 +104,8 @@ class ChatController:
 
             if document:
                 document_path = save_uploaded_file(
-                    document, UploadDirs.DOCUMENTS,
+                    document,
+                    UploadDirs.DOCUMENTS,
                 )
                 metadata["document"] = ExtractService.extract_text_from_pdf(
                     document_path,

@@ -10,23 +10,23 @@ from levai.core.utils.enums import UploadDirs
 
 
 def save_uploaded_file(uploaded_file: UploadedFile, folder_name: UploadDirs) -> str:
-    """Salva um arquivo enviado no servidor.
+    """Save an uploaded file to the server with a unique filename.
 
     Args:
-        uploaded_file: Arquivo enviado pelo usuário
-        folder_name: Nome da pasta onde salvar
+        uploaded_file (UploadedFile): The file uploaded by the user.
+        folder_name (UploadDirs): The target directory enum for the upload.
 
     Returns:
-        str: Caminho relativo do arquivo salvo
+        str: Relative path of the saved file within the media root.
 
     """
-    upload_dir = os.path.join(settings.MEDIA_ROOT, folder_name.value)
+    upload_dir: str = os.path.join(settings.MEDIA_ROOT, folder_name.value)
     os.makedirs(upload_dir, exist_ok=True)
 
-    file_extension = os.path.splitext(uploaded_file.name)[1]
-    unique_filename = f"{uuid.uuid4()}{file_extension}"
+    file_extension: str = os.path.splitext(uploaded_file.name)[1]
+    unique_filename: str = f"{uuid.uuid4()}{file_extension}"
 
-    file_path = os.path.join(upload_dir, unique_filename)
+    file_path: str = os.path.join(upload_dir, unique_filename)
 
     with open(file_path, "wb+") as destination:
         for chunk in uploaded_file.chunks():
