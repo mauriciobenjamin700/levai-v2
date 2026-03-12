@@ -2,7 +2,6 @@ start:
 	@docker compose up -d --build
 	@ollama run deepseek-r1:8b
 	@ollama run gemma3:27b
-	@docker exec -it levai-app python manage.py migrate
 
 
 lint-fix:

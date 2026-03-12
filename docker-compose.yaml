@@ -5,7 +5,9 @@ networks:
 volumes:
   levai-data:
     driver: local
-  levai-models:
+  levai-static:
+    driver: local
+  levai-media:
     driver: local
 
 
@@ -24,7 +26,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      -  levai-data:/var/lib/postgresql/data
+      - levai-data:/var/lib/postgresql/data
       - ./database/backups:/backups
     restart: always
     env_file:
@@ -37,11 +39,29 @@ services:
       dockerfile: Dockerfile
     networks:
       - levai_network
-    ports:
-      - "8040:8000"
+    volumes:
+      - levai-static:/app/staticfiles
+      - levai-media:/app/levai/media
+    expose:
+      - "8000"
     depends_on:
       - levai-database
-      - levai-models
     restart: always
     env_file:
       - .env
+
+  levai-nginx:
+    container_name: levai-nginx
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    networks:
+      - levai_network
+    ports:
+      - "8040:80"
+    volumes:
+      - levai-static:/app/staticfiles:ro
+      - levai-media:/app/levai/media:ro
+    depends_on:
+      - levai-app
+    restart: always
