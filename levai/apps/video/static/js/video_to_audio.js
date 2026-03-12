@@ -1,59 +1,47 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const videoInput = document.getElementById('video');
-    const videoPreview = document.getElementById('videoPreview');
-    const previewVideo = document.getElementById('previewVideo');
-    const videoInfo = document.getElementById('videoInfo');
-    const convertBtn = document.getElementById('convertBtn');
-    const clearBtn = document.getElementById('clearBtn');
-    const loadingIndicator = document.getElementById('loadingIndicator');
-    const videoForm = document.getElementById('videoForm');
-    
-    // Preview do vídeo quando selecionado
-    videoInput.addEventListener('change', function() {
-        const file = this.files[0];
-        
+document.addEventListener("DOMContentLoaded", function() {
+    var videoInput = document.getElementById("video");
+    var videoPreview = document.getElementById("videoPreview");
+    var previewVideo = document.getElementById("previewVideo");
+    var videoInfo = document.getElementById("videoInfo");
+    var convertBtn = document.getElementById("convertBtn");
+    var clearBtn = document.getElementById("clearBtn");
+    var loadingIndicator = document.getElementById("loadingIndicator");
+    var videoForm = document.getElementById("videoForm");
+
+    videoInput.addEventListener("change", function() {
+        var file = this.files[0];
+
         if (file) {
-            // Mostrar preview
-            const url = URL.createObjectURL(file);
+            var url = URL.createObjectURL(file);
             previewVideo.src = url;
-            videoPreview.style.display = 'block';
-            
-            // Mostrar informações do arquivo
-            const fileSizeMB = (file.size / 1024 / 1024).toFixed(2);
-            videoInfo.textContent = `📁 ${file.name} - 💾 ${fileSizeMB} MB`;
-            
-            // Habilitar botão de conversão
+            videoPreview.style.display = "block";
+
+            var fileSizeMB = (file.size / 1024 / 1024).toFixed(2);
+            videoInfo.textContent = file.name + " - " + fileSizeMB + " MB";
+
             convertBtn.disabled = false;
         } else {
-            // Esconder preview
-            videoPreview.style.display = 'none';
+            videoPreview.style.display = "none";
             convertBtn.disabled = true;
         }
     });
-    
-    // Botão limpar
-    clearBtn.addEventListener('click', function() {
-        videoInput.value = '';
-        videoPreview.style.display = 'none';
+
+    clearBtn.addEventListener("click", function() {
+        videoInput.value = "";
+        videoPreview.style.display = "none";
         convertBtn.disabled = true;
-        loadingIndicator.style.display = 'none';
+        loadingIndicator.style.display = "none";
     });
-    
-    // Envio do formulário
-    videoForm.addEventListener('submit', function(e) {
+
+    videoForm.addEventListener("submit", function(e) {
         if (!videoInput.files.length) {
             e.preventDefault();
-            alert('Por favor, selecione um vídeo!');
+            LevAI.toast("Por favor, selecione um vídeo!", "warning");
             return;
         }
-        
-        // Mostrar indicador de carregamento
-        loadingIndicator.style.display = 'block';
+
+        loadingIndicator.style.display = "block";
         convertBtn.disabled = true;
-        convertBtn.textContent = '⏳ Convertendo...';
-        
-        // O formulário será enviado normalmente
+        convertBtn.textContent = "Convertendo...";
     });
-    
-    // Verificar se há mensagens de erro para esconder loading
 });

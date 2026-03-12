@@ -1,102 +1,92 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Converter Vídeo para Áudio</title>
-    <link rel="stylesheet" href="{% static 'css/global.css' %}?v=123">
-    <link rel="stylesheet" href="{% static 'css/home.css' %}?v=123">
-    <link rel="stylesheet" href="{% static 'css/video.css' %}?v=123">
-</head>
-<body>
-    <div id="container" class="container">
-        {% include "partials/header.html" %}
-        {% include "partials/sidebar.html" %}
-        
-        <div id="content" class="content">
-            <h2>🎵 Converter Vídeo para Áudio MP3</h2>
-            
-            <!-- Mensagens de feedback -->
-            {% if messages %}
-                <div class="messages">
-                    {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-            
-            <div class="formContainer">
-                <form method="post" enctype="multipart/form-data" id="videoForm">
-                    {% csrf_token %}
-                    
-                    <div class="form-group">
-                        <label for="video">📹 Selecione o vídeo:</label>
-                        <input type="file" 
-                               id="video" 
-                               name="video" 
-                               accept="video/*" 
-                               required>
-                        <small class="help-text">
-                            Formatos aceitos: MP4, AVI, MKV, MOV, WMV, FLV
-                        </small>
-                    </div>
-                    
-                    <!-- Preview do vídeo -->
-                    <div id="videoPreview" style="display: none; margin: 20px 0;">
-                        <h4>📽️ Preview do Vídeo:</h4>
-                        <video id="previewVideo" 
-                               controls 
-                               style="max-width: 100%; max-height: 300px; border-radius: 8px;">
-                        </video>
-                        <p id="videoInfo" style="margin-top: 10px; color: #666;"></p>
-                    </div>
-                    
-                    <div class="button-group">
-                        <button type="submit" 
-                                id="convertBtn" 
-                                class="btn btn-primary">
-                            🎵 Converter para MP3
-                        </button>
-                        
-                        <button type="button" 
-                                id="clearBtn" 
-                                class="btn btn-secondary">
-                            🗑️ Limpar
-                        </button>
-                    </div>
-                    
-                    <!-- Indicador de progresso -->
-                    <div id="loadingIndicator" style="display: none; margin-top: 20px;">
-                        <div class="loading-spinner"></div>
-                        <p>Convertendo vídeo... Por favor, aguarde.</p>
-                    </div>
-                </form>
-                
-                <!-- Instruções -->
-                <div class="instructions">
-                    <h3>📋 Como usar:</h3>
-                    <ol>
-                        <li>Clique em "Selecione o vídeo" e escolha seu arquivo</li>
-                        <li>Visualize o preview (opcional)</li>
-                        <li>Clique em "Converter para MP3"</li>
-                        <li>O download do áudio MP3 iniciará automaticamente</li>
-                    </ol>
-                    
-                    <div class="features">
-                        <h4>✨ Recursos:</h4>
-                        <ul>
-                            <li>🎯 Conversão rápida e de qualidade</li>
-                            <li>📱 Suporte a diversos formatos</li>
-                            <li>🔊 Áudio em 192kbps</li>
-                            <li>📥 Download automático</li>
-                        </ul>
-                    </div>
-                </div>
+
+{% block title %}Converter Video para Audio{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/video.css' %}?v=200">
+{% endblock %}
+
+{% block content %}
+<h2>Converter Video para Audio MP3</h2>
+
+{% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
             </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<div class="formContainer">
+    <form method="post" enctype="multipart/form-data" id="videoForm">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="video">Selecione o video:</label>
+            <input type="file"
+                   id="video"
+                   name="video"
+                   accept="video/*"
+                   required>
+            <small class="help-text">
+                Formatos aceitos: MP4, AVI, MKV, MOV, WMV, FLV
+            </small>
+        </div>
+
+        <div id="videoPreview" style="display: none; margin: 20px 0;">
+            <h4>Preview do Video:</h4>
+            <video id="previewVideo"
+                   controls
+                   style="max-width: 100%; max-height: 300px; border-radius: 8px;">
+            </video>
+            <p id="videoInfo" style="margin-top: 10px; color: var(--text-secondary);"></p>
+        </div>
+
+        <div class="button-group">
+            <button type="submit"
+                    id="convertBtn"
+                    class="btn btn-primary">
+                Converter para MP3
+            </button>
+
+            <button type="button"
+                    id="clearBtn"
+                    class="btn btn-secondary">
+                Limpar
+            </button>
+        </div>
+
+        <div id="loadingIndicator" style="display: none; margin-top: 20px;">
+            <div class="loading-spinner"></div>
+            <p>Convertendo video... Por favor, aguarde.</p>
+        </div>
+    </form>
+
+    <div class="instructions">
+        <h3>Como usar:</h3>
+        <ol>
+            <li>Clique em "Selecione o video" e escolha seu arquivo</li>
+            <li>Visualize o preview (opcional)</li>
+            <li>Clique em "Converter para MP3"</li>
+            <li>O download do audio MP3 iniciara automaticamente</li>
+        </ol>
+
+        <div class="features">
+            <h4>Recursos:</h4>
+            <ul>
+                <li>Conversao rapida e de qualidade</li>
+                <li>Suporte a diversos formatos</li>
+                <li>Audio em 192kbps</li>
+                <li>Download automatico</li>
+            </ul>
         </div>
     </div>
-    <script src="{% static 'js/video_to_audio.js' %}"></script>
-</body>
-</html>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/video_to_audio.js' %}?v=200"></script>
+{% endblock %}

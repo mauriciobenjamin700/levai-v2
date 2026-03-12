@@ -1,30 +1,106 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Converter Markdown para PDF</title>
-    <link rel="stylesheet" href="{% static 'css/global.css' %}?v=123">
-    <link rel="stylesheet" href="{% static 'converter/styles.css' %}?v=123">
-    <!-- href="{% static 'converter/style.css' %}" -->
-</head>
-<body>
-    {% include "partials/header.html" %}
-    {% include "partials/sidebar.html" %}
-    <div class="center-box">
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <p class="info">Selecione um arquivo ZIP contendo um Markdown (.md) para converter em PDF.</p>
-            <input type="file" name="zip_file" accept=".zip" required>
-            <input type="text" name="output_name" placeholder="Nome do PDF" required>
-            <div>
-                <button>
-                    <a href="/document">Somente Markdown</a>
-                </button>
-                <button type="submit">Converter para PDF</button>
-            </div>
 
-        </form>
+{% block title %}Converter Markdown (ZIP) para PDF{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'converter/styles.css' %}?v=200">
+{% endblock %}
+
+{% block content %}
+<h2>Converter Markdown (ZIP) para PDF</h2>
+
+{% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
     </div>
-</body>
-</html>
+{% endif %}
+
+<div class="formContainer">
+    <form method="post" enctype="multipart/form-data" id="docForm">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="zip_file">Selecione o arquivo ZIP:</label>
+            <input type="file"
+                   id="zip_file"
+                   name="zip_file"
+                   accept=".zip"
+                   required>
+            <small class="help-text">
+                O ZIP deve conter pelo menos um arquivo .md (Markdown)
+            </small>
+        </div>
+
+        <div id="fileInfo" class="doc-file-info" style="display: none;">
+            <span id="fileName"></span>
+            <span id="fileSize"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="output_name">Nome do PDF:</label>
+            <input type="text"
+                   id="output_name"
+                   name="output_name"
+                   required
+                   placeholder="Ex: meu-documento">
+            <small class="help-text">
+                O arquivo sera salvo como nome.pdf
+            </small>
+        </div>
+
+        <div class="button-group">
+            <button type="submit"
+                    id="convertBtn"
+                    class="btn btn-primary">
+                Converter para PDF
+            </button>
+
+            <button type="button"
+                    id="clearBtn"
+                    class="btn btn-secondary">
+                Limpar
+            </button>
+        </div>
+
+        <div id="loadingIndicator" style="display: none; margin-top: 20px; text-align: center;">
+            <div class="loading-spinner"></div>
+            <p>Extraindo e convertendo... Por favor, aguarde.</p>
+        </div>
+    </form>
+
+    <div class="info-section">
+        <h3>Como usar:</h3>
+        <ol>
+            <li>Prepare um ZIP contendo seu arquivo .md e imagens</li>
+            <li>Selecione o arquivo ZIP</li>
+            <li>Escolha um nome para o PDF</li>
+            <li>Clique em "Converter para PDF"</li>
+            <li>O download iniciara automaticamente</li>
+        </ol>
+
+        <div class="features">
+            <h4>Recursos:</h4>
+            <ul>
+                <li>Suporte a Markdown com imagens</li>
+                <li>Extracao automatica do ZIP</li>
+                <li>Formatacao profissional no PDF</li>
+                <li>Download automatico</li>
+            </ul>
+        </div>
+
+        <p class="doc-alt-link">
+            Tem apenas um arquivo Markdown?
+            <a href="/document">Converter arquivo simples</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'converter/document.js' %}?v=200"></script>
+{% endblock %}

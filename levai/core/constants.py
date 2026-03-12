@@ -1,3 +1,3 @@
-"""Constants vars."""
+"""Application-wide constants."""
 
-TEMP_VIDEO_FILE_NAME = "video.mp4"
+TEMP_VIDEO_FILE_NAME: str = "video.mp4"

@@ -1,49 +1,34 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LevAI - {{ chat.title }}</title>
-    <link rel="stylesheet" href="{% static 'css/global.css' %}?v=123">
-    <link rel="stylesheet" href="{% static 'css/home.css' %}?v=123">
-    <link rel="stylesheet" href="{% static 'css/chat.css' %}?v=123">
-    <script src="{% static 'js/scripts.js' %}"></script>
-</head>
-<body>
-    <div id="container" class="container">
-        {% include "partials/header.html" %}
-        {% include "partials/sidebar.html" %} 
-        <div class="content">
-            {% include "partials/chat_input.html" %}
-            <h1>{{ chat.id }}</h1>
-            <div class="chat-history-container">
-                {% for message in chat.messages %}
-                    <div class="message-card">
-                        <div class="message-header">
-                            {% if message.role == 'assistant' %}
-                                <img src="{% static 'images/robot.png' %}" alt="Assistente IA" class="avatar">
-                            {% elif message.role == 'user' %}
-                                <img src="{% static 'images/humam.png' %}" alt="Usuário" class="avatar">
-                            {% else %}
-                                <img src="{% static 'images/default.png' %}" alt="Avatar" class="avatar">
-                            {% endif %}
-                            <span class="message-role">{{ message.role }}</span>
-                        </div>
-                        <p class="message-content">{{ message.content }}</p>
-                    </div>
-                {% endfor %}
-            </div>
 
-        </div>
+{% block title %}LevAI - {{ chat.title }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/chat.css' %}?v=202">
+{% endblock %}
+
+{% block content %}
+<div id="chat-page">
+    {% include "partials/chat_input.html" %}
+    <p class="chat-detail-header">{{ chat.id }}</p>
+    <div class="chat-messages-container">
+        {% for message in chat.messages %}
+            <div class="message-card role-{{ message.role }}">
+                <span class="message-role">{{ message.role }}</span>
+                <div class="message-bubble">{{ message.content }}</div>
+            </div>
+        {% endfor %}
     </div>
-</body>
+</div>
+{% endblock %}
+
+{% block extra_js %}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const chatMessages = document.querySelector('.chat-messages');
-        if (chatMessages) {
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+    document.addEventListener("DOMContentLoaded", function() {
+        var container = document.querySelector(".chat-messages-container");
+        if (container) {
+            container.scrollTop = container.scrollHeight;
         }
     });
-    </script>
-</html>
+</script>
+{% endblock %}

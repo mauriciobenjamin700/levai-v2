@@ -1,3 +1,7 @@
+"""Chat controller module."""
+
+import logging
+
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 
@@ -7,12 +11,17 @@ from levai.core.services.extract import ExtractService
 from levai.core.utils.enums import ChatRole, UploadDirs
 from levai.core.utils.upload import save_uploaded_file
 
+logger = logging.getLogger(__name__)
+
 
 class ChatController:
     """Controller for chat-related operations."""
 
     @staticmethod
-    def get_chat_view(request: HttpRequest, chat_id: str | None = None) -> HttpResponse:
+    def get_chat_view(
+        request: HttpRequest,
+        chat_id: str | None = None,
+    ) -> HttpResponse:
         """Render the chat view for authenticated users.
 
         Args:
@@ -27,14 +36,17 @@ class ChatController:
             try:
                 chat = ChatRepository.get_chat(chat_id=chat_id)
                 if not chat or str(chat.user.id) != str(request.user.id):
-                    print("CHAT NÃO ENCONTRADO OU NÃO PERTENCE AO USUÁRIO")
                     return redirect("chat_view")
 
-                chat: ChatResponse = ChatRepository.map_chat_to_response(chat)
-                return render(request, "chat_details.html", {"chat": chat})
+                chat_response: ChatResponse = ChatRepository.map_chat_to_response(chat)
+                return render(
+                    request,
+                    "chat_details.html",
+                    {"chat": chat_response},
+                )
 
             except Exception as e:
-                print(f"Erro ao buscar o chat: {str(e)}")
+                logger.error("Erro ao buscar o chat: %s", str(e))
                 return redirect("chat_view")
         else:
             chats = ChatRepository.get_all_chats(user_id=request.user.id)
@@ -45,9 +57,11 @@ class ChatController:
             return render(request, "chat.html", {"chats": response})
 
     @staticmethod
-    def new_chat_view(request: HttpRequest, chat_id: str | None = None) -> HttpResponse:
-        """Handle the creation of a new chat or processing a message in
-        an existing chat.
+    def new_chat_view(
+        request: HttpRequest,
+        chat_id: str | None = None,
+    ) -> HttpResponse:
+        """Handle the creation of a new chat or processing a message.
 
         Args:
             request (HttpRequest): The HTTP request object.
@@ -70,13 +84,15 @@ class ChatController:
             if not message:
                 message = ""
             if not chat_id:
-                chat = ChatRepository.create_chat(user=request.user, title=message[:50])
+                chat = ChatRepository.create_chat(
+                    user=request.user,
+                    title=message[:50],
+                )
                 chat = ChatRepository.add_chat(chat)
             else:
                 chat = ChatRepository.get_chat(chat_id=chat_id)
 
                 if chat.user.id != request.user.id:
-                    print("CHAT NÃO PERTENCE AO USUÁRIO")
                     return redirect("chat_view")
 
             metadata = {
@@ -87,21 +103,27 @@ class ChatController:
             }
 
             if document:
-                document_path = save_uploaded_file(document, UploadDirs.DOCUMENTS)
+                document_path = save_uploaded_file(
+                    document,
+                    UploadDirs.DOCUMENTS,
+                )
                 metadata["document"] = ExtractService.extract_text_from_pdf(
-                    document_path
+                    document_path,
                 )
             if image:
                 image_path = save_uploaded_file(image, UploadDirs.IMAGES)
-                metadata["image"] = ExtractService.extract_text_from_image(image_path)
+                metadata["image"] = ExtractService.extract_text_from_image(
+                    image_path,
+                )
 
             if video:
-                video_path = save_uploaded_file(video, UploadDirs.VIDEOS)
-                print(f"Vídeo salvo em: {video_path}")
+                save_uploaded_file(video, UploadDirs.VIDEOS)
 
             if audio:
                 audio_path = save_uploaded_file(audio, UploadDirs.AUDIO)
-                metadata["audio"] = ExtractService.transcribe_audio(audio_path)
+                metadata["audio"] = ExtractService.transcribe_audio(
+                    audio_path,
+                )
 
             content: str = ""
 
@@ -124,7 +146,7 @@ class ChatController:
             return redirect("chat_detail", chat_id=str(chat.id))
 
         except Exception as e:
-            print(f"Erro ao processar a mensagem: {str(e)}")
+            logger.error("Erro ao processar a mensagem: %s", str(e))
             if chat_id:
                 return redirect("chat_detail", chat_id=chat_id)
             return redirect("chat_view")

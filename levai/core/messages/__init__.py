@@ -7,7 +7,7 @@ from .error import (
 )
 from .handle import handle_error_message, handle_success_message
 
-__all__ = [
+__all__: list[str] = [
     "handle_error_message",
     "handle_success_message",
     "ERROR_USER_NOT_FOUND",

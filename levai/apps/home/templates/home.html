@@ -1,19 +1,49 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LevAI</title>
-    <link rel="stylesheet" href="{% static 'css/global.css' %}?v=123">
-    <link rel="stylesheet" href="{% static 'css/home.css' %}?v=123">
-    <script src="{% static 'js/scripts.js' %}?v=123"></script>
-</head>
-<body>
-    <div id="container" class="container">
-        {% include "partials/header.html" %}
-        {% include "partials/sidebar.html" %}
-    </div>
-</body>
-</html>
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}?v=300">
+{% endblock %}
+
+{% block content %}
+<div id="home-page">
+    <div class="home-hero">
+        <h1>Olá{% if user.first_name %}, {{ user.first_name }}{% endif %}</h1>
+        <p>O que vamos fazer hoje?</p>
+    </div>
+
+    <div class="home-features">
+        <a href="/chat/" class="feature-card">
+            <div class="feature-card-icon">
+                <i data-lucide="message-circle"></i>
+            </div>
+            <h3>Chat IA</h3>
+            <p>Converse com a inteligência artificial para tirar dúvidas e obter ajuda.</p>
+        </a>
+
+        <a href="/document/" class="feature-card">
+            <div class="feature-card-icon">
+                <i data-lucide="file-text"></i>
+            </div>
+            <h3>Documentos</h3>
+            <p>Converta arquivos Markdown em PDF de forma rápida e prática.</p>
+        </a>
+
+        <a href="/task/" class="feature-card">
+            <div class="feature-card-icon">
+                <i data-lucide="calendar-check"></i>
+            </div>
+            <h3>Tarefas</h3>
+            <p>Organize suas atividades em um calendário visual e intuitivo.</p>
+        </a>
+
+        <a href="/video/" class="feature-card">
+            <div class="feature-card-icon">
+                <i data-lucide="video"></i>
+            </div>
+            <h3>Vídeos</h3>
+            <p>Ferramentas para converter e extrair áudio de vídeos.</p>
+        </a>
+    </div>
+</div>
+{% endblock %}

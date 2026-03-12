@@ -8,7 +8,7 @@
 import os
 import re
 import tempfile
-from typing import Any
+from typing import Any, Literal
 
 import pytesseract
 import speech_recognition as sr
@@ -16,24 +16,16 @@ from pdf2image import convert_from_path
 from PIL import Image
 from pydub import AudioSegment
 from pypdf import PdfReader
-from typing_extensions import Literal
 
 from levai.core.utils.convert import convert_audio_to_wav
 
 
 class ExtractService:
-    """Get text from various file formats such as.
+    """Service for extracting text from PDF, images, and audio files.
 
-    - PDF,
-    - images,
-    - and audio files.
-
-    Methods:
-        extract_text_from_pdf: Extract text from a PDF file.
-        extract_text_from_pdf_ocr: Extract text from a PDF file using OCR.
-        extract_text_from_image: Extract text from an image file using OCR.
-        transcribe_audio: Method for audio transcription that tries different approaches
-        clean_and_format_text: Clean and format raw text.
+    Provides static methods for text extraction using different
+    backends: pypdf for PDFs, pytesseract for OCR, and Google
+    Speech Recognition for audio transcription.
 
     """
 
@@ -419,16 +411,16 @@ class ExtractService:
 
     @staticmethod
     def __transcribe_audio_google(audio_path: str) -> str:
-        """Transcreve áudio usando Google Speech Recognition.
+        """Transcribe audio using Google Speech Recognition.
 
         Args:
-            audio_path (str): Caminho do arquivo de áudio (qualquer formato)
+            audio_path (str): Path to the audio file (any supported format).
 
         Returns:
-            str: Texto transcrito
+            str: Transcribed text from the audio.
 
         """
-        converted_file = None
+        converted_file: str | None = None
 
         try:
             # Validar arquivo
@@ -479,21 +471,21 @@ class ExtractService:
             if converted_file and os.path.exists(converted_file):
                 try:
                     os.remove(converted_file)
-                except:
+                except Exception:
                     pass
 
     @staticmethod
     def __transcribe_audio_with_chunks(
         audio_path: str, chunk_duration: int = 60
     ) -> str:
-        """Transcreve áudios longos dividindo em chunks menores.
+        """Transcribe long audio files by splitting into smaller chunks.
 
         Args:
-            audio_path (str): Caminho do arquivo de áudio
-            chunk_duration (int): Duração de cada chunk em segundos
+            audio_path (str): Path to the audio file.
+            chunk_duration (int): Duration of each chunk in seconds.
 
         Returns:
-            str: Texto transcrito completo
+            str: Full transcribed text.
 
         """
         try:

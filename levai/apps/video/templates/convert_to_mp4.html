@@ -1,119 +1,108 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Converter Vídeo para MP4</title>
-    <link rel="stylesheet" href="{% static 'css/global.css' %}?v=123">
-    <link rel="stylesheet" href="{% static 'css/home.css' %?v=123}">
-    <link rel="stylesheet" href="{% static 'css/video.css' %}?v=123">
-</head>
-<body>
-    <div id="container" class="container">
-        {% include "partials/header.html" %}
-        {% include "partials/sidebar.html" %}
-        
-        <div id="content" class="content">
-            <h2>🎬 Converter Vídeo para MP4</h2>
-            
-            <!-- Mensagens de feedback -->
-            {% if messages %}
-                <div class="messages">
-                    {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-            
-            <div class="formContainer">
-                <form method="post" enctype="multipart/form-data" id="convertForm">
-                    {% csrf_token %}
-                    
-                    <div class="form-group">
-                        <label for="video">📹 Selecione o vídeo:</label>
-                        <input type="file" 
-                               id="video" 
-                               name="video" 
-                               accept=".mov,.avi,.mkv,.wmv,.flv,.webm,.m4v" 
-                               required>
-                        <small class="help-text">
-                            Formatos aceitos: MOV, AVI, MKV, WMV, FLV, WEBM, M4V
-                        </small>
-                    </div>
-                    
-                    <!-- Preview do vídeo -->
-                    <div id="videoPreview" style="display: none; margin: 20px 0;">
-                        <h4>📽️ Preview do Vídeo:</h4>
-                        <video id="previewVideo" 
-                               controls 
-                               style="max-width: 100%; max-height: 300px; border-radius: 8px;">
-                        </video>
-                        <div id="videoInfo" style="margin-top: 10px; color: #666;"></div>
-                    </div>
-                    
-                    <div class="button-group">
-                        <button type="submit" 
-                                id="convertBtn" 
-                                class="btn btn-primary">
-                            🎬 Converter para MP4
-                        </button>
-                        
-                        <button type="button" 
-                                id="clearBtn" 
-                                class="btn btn-secondary">
-                            🗑️ Limpar
-                        </button>
-                    </div>
-                    
-                    <!-- Indicador de progresso -->
-                    <div id="loadingIndicator" style="display: none; margin-top: 20px;">
-                        <div class="loading-spinner"></div>
-                        <p>Convertendo vídeo para MP4... Por favor, aguarde.</p>
-                        <small>⚠️ Não feche esta página durante a conversão</small>
-                    </div>
-                </form>
-                
-                <!-- Informações -->
-                <div class="info-section">
-                    <h3>📋 Como funciona:</h3>
-                    <ol>
-                        <li>Selecione um vídeo nos formatos suportados</li>
-                        <li>Visualize o preview (opcional)</li>
-                        <li>Clique em "Converter para MP4"</li>
-                        <li>Aguarde a conversão</li>
-                        <li>O download iniciará automaticamente</li>
-                    </ol>
-                    
-                    <div class="features">
-                        <h4>✨ Recursos:</h4>
-                        <ul>
-                            <li>🔄 Conversão de alta qualidade</li>
-                            <li>📱 Suporte a múltiplos formatos</li>
-                            <li>🎯 Codec H.264 otimizado</li>
-                            <li>📥 Download direto</li>
-                            <li>🔊 Áudio AAC preservado</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="supported-formats">
-                        <h4>📁 Formatos Suportados:</h4>
-                        <div class="format-grid">
-                            <span class="format-badge">MOV</span>
-                            <span class="format-badge">AVI</span>
-                            <span class="format-badge">MKV</span>
-                            <span class="format-badge">WMV</span>
-                            <span class="format-badge">FLV</span>
-                            <span class="format-badge">WEBM</span>
-                            <span class="format-badge">M4V</span>
-                        </div>
-                    </div>
-                </div>
+
+{% block title %}Converter Video para MP4{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/video.css' %}?v=200">
+{% endblock %}
+
+{% block content %}
+<h2>Converter Video para MP4</h2>
+
+{% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<div class="formContainer">
+    <form method="post" enctype="multipart/form-data" id="convertForm">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="video">Selecione o video:</label>
+            <input type="file"
+                   id="video"
+                   name="video"
+                   accept=".mov,.avi,.mkv,.wmv,.flv,.webm,.m4v"
+                   required>
+            <small class="help-text">
+                Formatos aceitos: MOV, AVI, MKV, WMV, FLV, WEBM, M4V
+            </small>
+        </div>
+
+        <div id="videoPreview" style="display: none; margin: 20px 0;">
+            <h4>Preview do Video:</h4>
+            <video id="previewVideo"
+                   controls
+                   style="max-width: 100%; max-height: 300px; border-radius: 8px;">
+            </video>
+            <div id="videoInfo" style="margin-top: 10px; color: var(--text-secondary);"></div>
+        </div>
+
+        <div class="button-group">
+            <button type="submit"
+                    id="convertBtn"
+                    class="btn btn-primary">
+                Converter para MP4
+            </button>
+
+            <button type="button"
+                    id="clearBtn"
+                    class="btn btn-secondary">
+                Limpar
+            </button>
+        </div>
+
+        <div id="loadingIndicator" style="display: none; margin-top: 20px;">
+            <div class="loading-spinner"></div>
+            <p>Convertendo video para MP4... Por favor, aguarde.</p>
+            <small>Nao feche esta pagina durante a conversao</small>
+        </div>
+    </form>
+
+    <div class="info-section">
+        <h3>Como funciona:</h3>
+        <ol>
+            <li>Selecione um video nos formatos suportados</li>
+            <li>Visualize o preview (opcional)</li>
+            <li>Clique em "Converter para MP4"</li>
+            <li>Aguarde a conversao</li>
+            <li>O download iniciara automaticamente</li>
+        </ol>
+
+        <div class="features">
+            <h4>Recursos:</h4>
+            <ul>
+                <li>Conversao de alta qualidade</li>
+                <li>Suporte a multiplos formatos</li>
+                <li>Codec H.264 otimizado</li>
+                <li>Download direto</li>
+                <li>Audio AAC preservado</li>
+            </ul>
+        </div>
+
+        <div class="supported-formats">
+            <h4>Formatos Suportados:</h4>
+            <div class="format-grid">
+                <span class="format-badge">MOV</span>
+                <span class="format-badge">AVI</span>
+                <span class="format-badge">MKV</span>
+                <span class="format-badge">WMV</span>
+                <span class="format-badge">FLV</span>
+                <span class="format-badge">WEBM</span>
+                <span class="format-badge">M4V</span>
             </div>
         </div>
     </div>
+</div>
+{% endblock %}
 
-    <script src="{% static 'js/convert_to_mp4.js' %}"></script>
-</body>
-</html>
+{% block extra_js %}
+<script src="{% static 'js/convert_to_mp4.js' %}?v=200"></script>
+{% endblock %}

@@ -34,30 +34,37 @@ class User(AbstractUser):
         db_table = "users"
         verbose_name = "User"
         verbose_name_plural = "Users"
-        # ordering = ["-created_at"]
-        # unique_together = [["username", "email"]]
-        # indexes = [
-        #     models.Index(fields=["username"], name="username_idx"),
-        #     models.Index(fields=["email"], name="email_idx"),
-        # ]
-        # permissions = [
-        #     ("view_user", "Can view user"),
-        #     ("edit_user", "Can edit user"),
-        #     ("delete_user", "Can delete user"),
-        # ]
 
-    def __str__(self):
-        """Return a string representation of the user instance."""
-        return " ,".join([f"{key}: {value}" for key, value in self.to_dict().items()])
-
-    def to_dict(self, exclude: list[str] = [], include: dict = {}) -> dict:
-        """Convert the user instance to a dictionary.
+    def __str__(self) -> str:
+        """Return a string representation of the user instance.
 
         Returns:
-            dict: Dictionary representation of the user instance.
+            str: Comma-separated key-value pairs of the user data.
 
         """
-        data = {
+        return " ,".join([f"{key}: {value}" for key, value in self.to_dict().items()])
+
+    def to_dict(
+        self,
+        exclude: list[str] | None = None,
+        include: dict[str, object] | None = None,
+    ) -> dict[str, object]:
+        """Convert the user instance to a dictionary.
+
+        Args:
+            exclude (list[str] | None): List of fields to exclude.
+                Defaults to None.
+            include (dict[str, object] | None): Additional key-value pairs
+                to merge into the dictionary. Defaults to None.
+
+        Returns:
+            dict[str, object]: Dictionary representation of the user instance.
+
+        """
+        if exclude is None:
+            exclude = []
+
+        data: dict[str, object] = {
             "id": str(self.id) if hasattr(self, "id") else None,
             "username": self.username,
             "email": self.email,
@@ -72,6 +79,7 @@ class User(AbstractUser):
         for field in exclude:
             data.pop(field, None)
 
-        data.update(include)
+        if include:
+            data.update(include)
 
         return data
