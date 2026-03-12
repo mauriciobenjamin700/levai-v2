@@ -109,6 +109,7 @@ def download_video_hd(video_url: str) -> str | None:
 
         ydl_opts: dict[str, object] = {
             "format": "bestvideo+bestaudio/best",
+            "merge_output_format": "mp4",
             "outtmpl": join(output_dir, TEMP_VIDEO_FILE_NAME),
         }
 

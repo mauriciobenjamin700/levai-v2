@@ -51,7 +51,7 @@ def download_view(request: HttpRequest) -> HttpResponse | FileResponse:
 
             file_path = None
 
-        if file_path:
+        if file_path and os.path.exists(file_path):
 
             return FileResponse(
                 open(file_path, "rb"),
@@ -60,7 +60,10 @@ def download_view(request: HttpRequest) -> HttpResponse | FileResponse:
             )
 
         else:
-            messages.error(request, "Erro ao baixar o vídeo.")
+            messages.error(
+                request,
+                "Erro ao baixar o vídeo. Verifique se o FFmpeg está instalado.",
+            )
 
     return render(request, "video_download.html")
 
